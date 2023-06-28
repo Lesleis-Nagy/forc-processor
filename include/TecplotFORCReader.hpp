@@ -40,6 +40,22 @@ public:
 
     FORCCurves() = default;
 
+    [[nodiscard]] size_t n_verts() const {
+        return _n_verts.value();
+    }
+
+    [[nodiscard]] size_t n_elems() const {
+        return _n_elems.value();
+    }
+
+    [[nodiscard]] const std::vector<double> &x() const { return _x; }
+    [[nodiscard]] const std::vector<double> &y() const { return _y; }
+    [[nodiscard]] const std::vector<double> &z() const { return _z; }
+
+    [[nodiscard]] const std::vector<size_t> &tetra_submesh_idxs() const { return _tetra_submesh_idxs; }
+    [[nodiscard]] const std::vector<size_t> &tetra_idxs() const { return _tetra_idxs; }
+
+
 private:
 
     std::optional<size_t> _n_verts;
@@ -51,8 +67,8 @@ private:
     std::vector<double> _y;
     std::vector<double> _z;
 
-    std::vector<size_t> _tetra_submesh_idx;
-    std::vector<size_t> _tetra_idx;
+    std::vector<size_t> _tetra_submesh_idxs;
+    std::vector<size_t> _tetra_idxs;
 
     std::vector<std::vector<double>> _mx;
     std::vector<std::vector<double>> _my;
@@ -90,11 +106,11 @@ private:
     }
 
     [[nodiscard]] bool tetra_submesh_idx_is_full() const {
-        return _tetra_submesh_idx.size() >= _n_elems.value();
+        return _tetra_submesh_idxs.size() >= _n_elems.value();
     }
 
     [[nodiscard]] bool tetra_idx_is_full() const {
-        return _tetra_idx.size() >= _n_elems.value() * 4;
+        return _tetra_idxs.size() >= _n_elems.value() * 4;
     }
 
 
@@ -111,7 +127,7 @@ public:
             _regex_float_line(R"r(^\s*([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)(\s+([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?))*\s*$)r")
     {}
 
-    void read_file(const std::string &file_name) {
+    FORCCurves read_file(const std::string &file_name) {
 
         FORCCurves forc_curves;
 
@@ -148,8 +164,8 @@ public:
                     forc_curves._n_verts = std::stoi(str_n_verts);
                     forc_curves._n_elems = std::stoi(str_n_elems);
 
-                    forc_curves._tetra_idx.reserve(forc_curves._n_elems.value());
-                    forc_curves._tetra_submesh_idx.reserve(4 * forc_curves._n_elems.value());
+                    forc_curves._tetra_idxs.reserve(forc_curves._n_elems.value());
+                    forc_curves._tetra_submesh_idxs.reserve(4 * forc_curves._n_elems.value());
 
                     forc_curves._x.reserve(forc_curves._n_verts.value());
                     forc_curves._y.reserve(forc_curves._n_verts.value());
@@ -255,9 +271,9 @@ public:
                     for (const auto& str_value : str_values) {
                         if (!str_value.empty()) {
                             if (!forc_curves.tetra_submesh_idx_is_full()) {
-                                forc_curves._tetra_submesh_idx.push_back(std::stoull(str_value));
+                                forc_curves._tetra_submesh_idxs.push_back(std::stoull(str_value));
                             } else if (!forc_curves.tetra_idx_is_full()) {
-                                forc_curves._tetra_idx.push_back(std::stoull(str_value));
+                                forc_curves._tetra_idxs.push_back(std::stoull(str_value) - 1);
                             } else {
                                 throw std::runtime_error("Too many integers for zone.");
                             }
@@ -339,7 +355,7 @@ public:
 
         auto duration = std::chrono::duration_cast<std::chrono::minutes>(stop - start);
 
-        std::cout << duration.count() << std::endl;
+        return forc_curves;
 
     }
 
