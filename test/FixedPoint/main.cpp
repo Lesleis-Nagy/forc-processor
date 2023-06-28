@@ -6,15 +6,21 @@
 
 #include <catch/catch.hpp>
 
-#include "FixedPoint.hpp"
+#include "Fraction.hpp"
 
 
 TEST_CASE("Some test", "part 1") {
 
-    FixedPoint fp(100.123);
+    Fraction fpp(100.123);
+    Fraction fpn(-100.123);
+    Fraction fpp2(100.123456789);
 
-    std::cout << fp << std::endl;
+    Fraction fp3 = fpp + fpn;
 
-    // REQUIRE(expected_value == actual_value);
+    std::cout << fpp << std::endl;
+    std::cout << fpn << std::endl;
+    std::cout << fpp2 << std::endl;
+    std::cout << fp3 << std::endl;
 
 }
+
