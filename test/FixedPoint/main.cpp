@@ -9,7 +9,7 @@
 #include "Fraction.hpp"
 
 
-TEST_CASE("Some test", "part 1") {
+TEST_CASE("Test normal operation", "part 1") {
 
     Fraction fpp(100.123);
     Fraction fpn(-100.123);

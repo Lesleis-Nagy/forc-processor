@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Fraction.hpp"
+
 template <> struct std::hash <std::pair<int, int>> {
 
     size_t operator() (const std::pair<int, int> &key) const noexcept {
@@ -74,8 +76,8 @@ private:
     std::vector<std::vector<double>> _my;
     std::vector<std::vector<double>> _mz;
 
-    std::unordered_map<std::pair<int, int>, size_t> _brbb_to_fidx;
-    std::unordered_map<size_t, std::pair<int, int>> _fidx_to_brbb;
+    std::unordered_map<FractionPair, size_t> _brbb_to_fidx;
+    std::unordered_map<size_t, FractionPair> _fidx_to_brbb;
 
     std::optional<std::string> _brbb_unit;
 
@@ -211,9 +213,9 @@ public:
                 std::string str_zone_title = match_zone[1].str();
                 if (std::regex_match(str_zone_title, match_zone_title, _regex_zone_title)) {
 
-                    int br = std::stoi(match_zone_title[2].str());
+                    Fraction br(match_zone_title[2].str());
                     std::string br_unit = match_zone_title[3].str();
-                    int bb = std::stoi(match_zone_title[5].str());
+                    Fraction bb(match_zone_title[5].str());
                     std::string bb_unit = match_zone_title[6].str();
 
                     if (zone_counter == 1) {

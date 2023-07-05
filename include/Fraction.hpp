@@ -8,16 +8,7 @@
 #include <string>
 #include <sstream>
 
-template <typename T> long sgn(T val) {
-    return (T(0) < val) - (val < T(0));
-}
-
-template <class T>
-inline void hash_combine(std::size_t& seed, const T& v)
-{
-    std::hash<T> hasher;
-    seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-}
+#include "Utilities.hpp"
 
 class Fraction {
 
@@ -25,27 +16,35 @@ public:
 
     Fraction(): _n(0), _d(1) {}
 
+    explicit Fraction(long long n) : _n(n), _d(1) {}
+
+    explicit Fraction(long n) : _n(n), _d(1) {}
+
+    explicit Fraction(int n): _n(n), _d(1) {}
+
+    Fraction(long long n, long long d): _n(n), _d(d) {}
+
     Fraction(long n, long d): _n(n), _d(d) {}
 
     Fraction(int n, int d): _n(n), _d(d) {}
 
-    explicit Fraction(double v, long max_precision=4):_n(0), _d(1) {
+    explicit Fraction(double v, size_t max_precision=4):_n(0), _d(1) {
         set(v, max_precision);
     }
 
-    explicit Fraction(const char *v, long max_precision=4):_n(0), _d(1) {
+    explicit Fraction(const char *v, size_t max_precision=4):_n(0), _d(1) {
         set(std::stod(v), max_precision);
     }
 
-    explicit Fraction(const std::string &v, long max_precision=4): _n(0), _d(1) {
+    explicit Fraction(const std::string &v, size_t max_precision=4): _n(0), _d(1) {
         set(std::stod(v), max_precision);
     }
 
-    [[nodiscard]] long numerator() const {
+    [[nodiscard]] long long numerator() const {
         return _n;
     }
 
-    [[nodiscard]] long denominator() const {
+    [[nodiscard]] long long denominator() const {
         return _d;
     }
 
@@ -103,7 +102,7 @@ public:
 
 private:
 
-    [[nodiscard]] long gcd(long n1, long n2) const {
+    [[nodiscard]] long long gcd(long long n1, long long n2) const {
 
         n1 = ( n1 > 0) ? n1 : -n1;
         n2 = ( n2 > 0) ? n2 : -n2;
@@ -120,36 +119,36 @@ private:
     }
 
 
-    void set(double v, long max_precision) {
+    void set(double v, size_t max_precision) {
 
         // The sign of the number.
-        long sign = sgn(v);
+        long long sign = sgn(v);
 
         // Make sure the number is positive.
         double vpos = v < 0.0 ? -1.0 * v : v;
 
         // Isolate the fraction part of the number.
-        double frac_part = vpos - (long) vpos;
+        double frac_part = vpos - (double)((long long) vpos);
 
         // Isolate the integer part of the number.
-        long int_part = (long) vpos;
+        long long int_part = (long long) vpos;
 
         // used to 'pop' digits off the frac_part.
         double dbl_power = 10.0;
 
         // denominator of the fraction part.
-        long denominator = 10;
-        for (long i = 1; i <= max_precision; ++i) {
+        long long denominator = 10;
+        for (size_t i = 1; i <= max_precision; ++i) {
             denominator *= 10;
         }
 
         // used to rebuild digits of the frac_part in to numerator.
-        long int_power = denominator / 10;
+        long long int_power = denominator / 10;
 
         // numerator of the fraction part (accumulated in the for loop).
-        long numerator = 0;
+        long long numerator = 0;
 
-        for (long digit_idx = 1; digit_idx <= max_precision; ++digit_idx) {
+        for (size_t i = 1; i <= max_precision; ++i) {
 
             // Shift frac_part up by a digit and grab that digit.
             auto digit = (long) (frac_part * dbl_power);
@@ -191,18 +190,20 @@ private:
     }
 
 
-    long _n;
-    long _d;
+    long long _n;
+    long long _d;
 
 };
+
+typedef std::pair<Fraction, Fraction> FractionPair;
 
 template<>
 struct std::hash<Fraction>
 {
     std::size_t operator()(Fraction const& v) const noexcept
     {
-        std::size_t n = std::hash<long>{}(v.numerator());
-        std::size_t d = std::hash<long>{}(v.denominator());
+        std::size_t n = std::hash<long long>{}(v.numerator());
+        std::size_t d = std::hash<long long>{}(v.denominator());
 
         size_t seed = 0;
 
@@ -213,8 +214,29 @@ struct std::hash<Fraction>
     }
 };
 
+template<>
+struct std::hash<FractionPair>
+{
+    std::size_t operator()(FractionPair const& v) const noexcept
+    {
+        std::size_t n = std::hash<Fraction>{}(v.first);
+        std::size_t d = std::hash<Fraction>{}(v.second);
 
-std::ostream & operator<<(std::ostream & out, Fraction fp) {
+        size_t seed = 0;
+
+        hash_combine(seed, n);
+        hash_combine(seed, d);
+
+        return seed;
+    }
+};
+
+std::ostream & operator<<(std::ostream & out, const Fraction &fp) {
     out << fp.numerator() << "/" << fp.denominator();
+    return out;
+}
+
+std::ostream &operator<<(std::ostream & out, const FractionPair &fp) {
+    out << "(" << fp.first << ", " << fp.second << ")";
     return out;
 }
