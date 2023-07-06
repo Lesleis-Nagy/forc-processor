@@ -38,22 +38,29 @@ Float
   ;
 
 # Creates a 2d scalar function
-myfunc(x,y) = sin(x)cos(y)
+FUNCTION myfunc(x,y) = sin(x)cos(y)
 
 # Creates a 3d scalar function
-myfunc2(x,y,z) = sin(x)cos(y)tan(z)
+FUNCTION myfunc2(x,y,z) = sin(x)cos(y)tan(z)
 
 # Creates a 2d vector function
-myfunc3(x,y) = <sin(x)cos(y), sin(y)cos(x)>
+FUNCTION myfunc3(x,y) = <sin(x)cos(y), sin(y)cos(x)>
 
 # Creates a 3d vector function
-myfunc4(x,y,z) = <sin(x)cos(y), sin(y)cos(x), sin(z)cos(z)>
+FUNCTION myfunc4(x,y,z) = <sin(x)cos(y), sin(y)cos(x), sin(z)cos(z)>
 
-# Creates a set of random points
-points myname are random with x::min=-1 x::max=2 y::min-1 y::max=2 n=100 seed=1337
+# Creates a set of random 2D points
+POINTS myname ARE RANDOM WITH x:minimum=-1 x:maximum=2 y:minimum-1 y:maximum=2 n=100 seed=1337
 
-# Creates a set of uniform points
-points myothername are uniform with x::min=-1 x::max=2 y::min=-1 y::max=2 x::n=100 y::n=200
+# Creates a set of uniform 3D points
+POINTS myothername ARE UNIFORM WITH x:minimum=-1 x:maximum=2 y:minimum=-1 y:maximum=2 x:n=100 y:n=200
 
-# Creates an interpolation of func
-interpolation myinterpolation using myfunc with rbf::gaussian::3
+# Creates an interpolation of func (dimensionalities are checked)
+INTERPOLATION myinterp USING function=myfunc points=mypoints gaussian(1.2)
+
+# Evaluate interpolations/functions
+RESULT myresult = EVALUATE function=myfunc points=mypoints
+RESULT myresult2 = EVALUATE interpolation=myinterp points=mypoints
+
+SAVE myresult TO myfile.csv
+SAVE myresult2 TO myfile2.csv
