@@ -193,7 +193,7 @@ template<typename _MatrixType> class ColPivHouseholderQR
     }
 
     /** \returns a reference to the matrix where the result Householder QR is stored
-     * \warning The strict lower part of this matrix contains internal values.
+     * \warning The strict lower part of this matrix in internal values.
      * Only the upper triangular part should be referenced. To get it, use
      * \code matrixR().template triangularView<Upper>() \endcode
      * For rank-deficient matrices, use

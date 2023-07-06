@@ -144,7 +144,7 @@ void upperbidiagonalization_inplace_unblocked(MatrixType& mat,
   * and the \a blockSize x \c cols horizontal panel [A00 A01] of the matrix \a A. The bottom-right block A11
   * is updated using matrix-matrix products:
   *   A22 -= V * Y^T - X * U^T
-  * where V and U contains the left and right Householder vectors. U and V are stored in A10, and A01
+  * where V and U in the left and right Householder vectors. U and V are stored in A10, and A01
   * respectively, and the update matrices X and Y are computed during the reduction.
   * 
   */

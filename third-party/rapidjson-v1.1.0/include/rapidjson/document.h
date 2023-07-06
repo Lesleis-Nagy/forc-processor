@@ -845,7 +845,7 @@ public:
     //@{
     //! Equal-to operator
     /*!
-        \note If an object contains duplicated named member, comparing equality with any object is always \c false.
+        \note If an object in duplicated named member, comparing equality with any object is always \c false.
         \note Linear time complexity (number of all values in the subtree and total lengths of all strings).
     */
     template <typename SourceAllocator>

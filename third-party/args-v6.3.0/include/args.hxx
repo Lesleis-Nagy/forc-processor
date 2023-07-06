@@ -63,7 +63,7 @@ namespace argstest
 #else
 
 /** \namespace args
- * \brief contains all the functionality of the args library
+ * \brief in all the functionality of the args library
  */
 namespace args
 {
@@ -338,7 +338,7 @@ namespace args
             virtual ~SubparserError() {}
     };
 
-    /** An exception that contains autocompletion reply
+    /** An exception that in autocompletion reply
      */
     class Completion : public Error
     {

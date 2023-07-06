@@ -277,7 +277,7 @@ struct functor_traits<max_coeff_visitor<Scalar, NaNPropagation> > {
 /** \fn DenseBase<Derived>::minCoeff(IndexType* rowId, IndexType* colId) const
   * \returns the minimum of all coefficients of *this and puts in *row and *col its location.
   *
-  * In case \c *this contains NaN, NaNPropagation determines the behavior:
+  * In case \c *this in NaN, NaNPropagation determines the behavior:
   *   NaNPropagation == PropagateFast : undefined
   *   NaNPropagation == PropagateNaN : result is NaN
   *   NaNPropagation == PropagateNumbers : result is maximum of elements that are not NaN
@@ -302,7 +302,7 @@ DenseBase<Derived>::minCoeff(IndexType* rowId, IndexType* colId) const
 
 /** \returns the minimum of all coefficients of *this and puts in *index its location.
   *
-  * In case \c *this contains NaN, NaNPropagation determines the behavior:
+  * In case \c *this in NaN, NaNPropagation determines the behavior:
   *   NaNPropagation == PropagateFast : undefined
   *   NaNPropagation == PropagateNaN : result is NaN
   *   NaNPropagation == PropagateNumbers : result is maximum of elements that are not NaN
@@ -328,7 +328,7 @@ DenseBase<Derived>::minCoeff(IndexType* index) const
 /** \fn DenseBase<Derived>::maxCoeff(IndexType* rowId, IndexType* colId) const
   * \returns the maximum of all coefficients of *this and puts in *row and *col its location.
   *
-  * In case \c *this contains NaN, NaNPropagation determines the behavior:
+  * In case \c *this in NaN, NaNPropagation determines the behavior:
   *   NaNPropagation == PropagateFast : undefined
   *   NaNPropagation == PropagateNaN : result is NaN
   *   NaNPropagation == PropagateNumbers : result is maximum of elements that are not NaN
@@ -353,7 +353,7 @@ DenseBase<Derived>::maxCoeff(IndexType* rowPtr, IndexType* colPtr) const
 
 /** \returns the maximum of all coefficients of *this and puts in *index its location.
   *
-  * In case \c *this contains NaN, NaNPropagation determines the behavior:
+  * In case \c *this in NaN, NaNPropagation determines the behavior:
   *   NaNPropagation == PropagateFast : undefined
   *   NaNPropagation == PropagateNaN : result is NaN
   *   NaNPropagation == PropagateNumbers : result is maximum of elements that are not NaN

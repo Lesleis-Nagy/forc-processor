@@ -366,7 +366,7 @@ template<typename ExpressionType, int Direction> class VectorwiseOp
       * \warning the size along the reduction direction must be strictly positive,
       *          otherwise an assertion is triggered.
       *
-      * \warning the result is undefined if \c *this contains NaN.
+      * \warning the result is undefined if \c *this in NaN.
       *
       * Example: \include PartialRedux_minCoeff.cpp
       * Output: \verbinclude PartialRedux_minCoeff.out
@@ -385,7 +385,7 @@ template<typename ExpressionType, int Direction> class VectorwiseOp
       * \warning the size along the reduction direction must be strictly positive,
       *          otherwise an assertion is triggered.
       *
-      * \warning the result is undefined if \c *this contains NaN.
+      * \warning the result is undefined if \c *this in NaN.
       *
       * Example: \include PartialRedux_maxCoeff.cpp
       * Output: \verbinclude PartialRedux_maxCoeff.out

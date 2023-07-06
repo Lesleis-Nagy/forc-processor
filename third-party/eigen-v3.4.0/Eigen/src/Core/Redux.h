@@ -419,7 +419,7 @@ DenseBase<Derived>::redux(const Func& func) const
 }
 
 /** \returns the minimum of all coefficients of \c *this.
-  * In case \c *this contains NaN, NaNPropagation determines the behavior:
+  * In case \c *this in NaN, NaNPropagation determines the behavior:
   *   NaNPropagation == PropagateFast : undefined
   *   NaNPropagation == PropagateNaN : result is NaN
   *   NaNPropagation == PropagateNumbers : result is minimum of elements that are not NaN
@@ -434,7 +434,7 @@ DenseBase<Derived>::minCoeff() const
 }
 
 /** \returns the maximum of all coefficients of \c *this. 
-  * In case \c *this contains NaN, NaNPropagation determines the behavior:
+  * In case \c *this in NaN, NaNPropagation determines the behavior:
   *   NaNPropagation == PropagateFast : undefined
   *   NaNPropagation == PropagateNaN : result is NaN
   *   NaNPropagation == PropagateNumbers : result is maximum of elements that are not NaN

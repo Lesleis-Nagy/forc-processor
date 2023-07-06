@@ -1,3 +1,4 @@
 add_subdirectory(Cuboid)
 add_subdirectory(FixedPoint)
 add_subdirectory(RBFInterpolation)
+add_subdirectory(Rectangle)

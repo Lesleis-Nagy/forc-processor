@@ -8,207 +8,178 @@
 
 /**
  * A class to encode the concept of a cuboid - the three dimensional analogue of a rectangle. The cuboid is defined
- * by two three-dimensional coordinates i) a front-bottom-left coordinate, and ii) a back-top-right coordinate.
+ * by a midpoint coordinate and the edge lengths Dx, Dy & Dz.
  */
 class Cuboid {
 
 public:
 
     /**
-     * Create a cuboid with center-point <xm, ym, zm> and edge lengths Dx, Dy & Dz.
+     * Create a cuboid with center-point <mx, my> and edge lengths Dx, Dy & Dz.
      */
-    Cuboid(double xm, double ym, double zm, double Dx, double Dy, double Dz) {
-        set_points(xm, ym, zm, Dx, Dy, Dz);
-    }
+    Cuboid(double new_mx, double new_my, double new_mz, double new_Dx, double new_Dy, double new_Dz):
+    mx(new_mx), my(new_my), mz(new_mz), Dx(new_Dx), Dy(new_Dy), Dz(new_Dz)
+    {}
 
     /**
      * Create a cuboid with center-point p and edge lengths Dx, Dy & Dz.
      */
-    Cuboid(const Point3D &p, double Dx, double Dy, double Dz) {
-        set_points(p.x, p.y, p.z, Dx, Dy, Dz);
+    Cuboid(const Point3D &new_p, double new_Dx, double new_Dy, double new_Dz):
+    mx(new_p.x), my(new_p.y), mz(new_p.z), Dx(new_Dx), Dy(new_Dy), Dz(new_Dz)
+    {}
+
+    /**
+     * Test if a point is in the the cuboid.
+     * @param p a point in 3D space.
+     * @return true if p is in the cuboid, otherwise false.
+     */
+    [[nodiscard]] bool in(const Point3D &p) const {
+
+        return (mx - Dx / 2 < p.x) && (p.x < mx + Dx / 2) &&
+               (my - Dy / 2 < p.y) && (p.y < my + Dy / 2) &&
+               (mz - Dz / 2 < p.z) && (p.z < mz + Dz / 2);
+
     }
 
     /**
-     * Retrieve the cuboid's mid point.
-     * @return  the cuboid mid point.
+     * Test if a point is in the bottom-back-left sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the bottom-back-left sub-cuboid, otherwise false.
      */
-    [[nodiscard]] const Point3D &mid() const {
-        return _p13;
+    [[nodiscard]] bool in_bottom_back_left(const Point3D &p) const {
+
+        return (mx - Dx / 2 < p.x) && (p.x < mx) &&
+               (my - Dy / 2 < p.y) && (p.y < my) &&
+               (mz - Dz / 2 < p.z) && (p.z < mz);
+
     }
 
     /**
-     * Retrieve the cuboid's x-length (x-diameter).
-     * @return the cuboid's x-length (x-diameter).
+     * Test if a point is in the bottom-back-right sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the bottom-back-right sub-cuboid, otherwise false.
      */
-    [[nodiscard]] double Dx() const {
-        return _Dx;
+    [[nodiscard]] bool in_bottom_back_right(const Point3D &p) const {
+
+        return (mx < p.x) && (p.x < mx + Dx / 2) &&
+               (my - Dy / 2 < p.y) && (p.y < my) &&
+               (mz - Dz / 2 < p.z) && (p.z < mz);
+
     }
 
     /**
-     * Retrieve the cuboid's y-length (y-diameter).
-     * @return the cuboid's y-length (y-diameter).
+     * Test if a point is in the bottom-front-left sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the bottom-front-left sub-cuboid, otherwise false.
      */
-    [[nodiscard]] double Dy() const {
-        return _Dy;
+    [[nodiscard]] bool in_bottom_front_left(const Point3D &p) const {
+
+        return (mx - Dx / 2 < p.x) && (p.x < mx) &&
+               (my - Dy / 2 < p.y) && (p.y < my) &&
+               (mz < p.z) && (p.z < mz + Dz / 2);
+
     }
 
     /**
-     * Retrieve the cuboid's z-length (z-diameter).
-     * @return the cuboid's z-length (z-diameter).
+     * Test if a point is in the bottom-front-right sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the bottom-front-right sub-cuboid, otherwise false.
      */
-    [[nodiscard]] double Dz() const {
-        return _Dz;
-    }
+    [[nodiscard]] bool in_bottom_front_right(const Point3D &p) const {
 
-    [[nodiscard]] bool contains(const Point3D &p) const {
-
-        const Point3D m = mid();
-
-        return (m.x - Dx() / 2 < p.x) && (p.x < m.x + Dx() / 2) && (m.y - Dy() / 2 < p.y) && (p.y < m.y + Dy() / 2) &&
-               (m.z - Dz() / 2 < p.z) && (p.z < m.z + Dz() / 2);
+        return (mx < p.x) && (p.x < mx + Dx / 2) &&
+               (my - Dy / 2 < p.y) && (p.y < my) &&
+               (mz < p.z) && (p.z < mz + Dz / 2);
 
     }
 
-    [[nodiscard]] bool contained_in_bottom_back_left(const Point3D &p) const {
+    /**
+     * Test if a point is in the top-back-left sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the top-back-left sub-cuboid, otherwise false.
+     */
+    [[nodiscard]] bool in_top_back_left(const Point3D &p) const {
 
-        const Point3D m = mid();
-
-        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) &&
-               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
-
-    }
-
-    [[nodiscard]] bool contained_in_bottom_back_right(const Point3D &p) const {
-
-        const Point3D m = mid();
-
-        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) &&
-               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
+        return (mx - Dx / 2 < p.x) && (p.x < mx) &&
+               (my < p.y) && (p.y < my + Dy / 2) &&
+               (mz - Dz / 2 < p.z) && (p.z < mz);
 
     }
 
-    [[nodiscard]] bool contained_in_bottom_front_left(const Point3D &p) const {
+    /**
+     * Test if a point is in the top-back-right sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the top-back-right sub-cuboid, otherwise false.
+     */
+    [[nodiscard]] bool in_top_back_right(const Point3D &p) const {
 
-        const Point3D m = mid();
-
-        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) && (m.z < p.z) &&
-               (p.z < m.z + Dz() / 2);
-
-    }
-
-    [[nodiscard]] bool contained_in_bottom_front_right(const Point3D &p) const {
-
-        const Point3D m = mid();
-
-        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) && (m.z < p.z) &&
-               (p.z < m.z + Dz() / 2);
+        return (mx < p.x) && (p.x < mx + Dx / 2) &&
+               (my < p.y) && (p.y < my + Dy / 2) &&
+               (mz - Dz / 2 < p.z) && (p.z < mz);
 
     }
 
-    [[nodiscard]] bool contained_in_top_back_left(const Point3D &p) const {
+    /**
+     * Test if a point is in the top-front-left sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the top-front-left sub-cuboid, otherwise false.
+     */
+    [[nodiscard]] bool in_top_front_left(const Point3D &p) const {
 
-        const Point3D m = mid();
-
-        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y < p.y) && (p.y < m.y + Dy() / 2) &&
-               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
-
-    }
-
-    [[nodiscard]] bool contained_in_top_back_right(const Point3D &p) const {
-
-        const Point3D m = mid();
-
-        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y < p.y) && (p.y < m.y + Dy() / 2) &&
-               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
+        return (mx - Dx / 2 < p.x) && (p.x < mx) &&
+               (my < p.y) && (p.y < my + Dy / 2) &&
+               (mz < p.z) && (p.z < mz + Dz / 2);
 
     }
 
-    [[nodiscard]] bool contained_in_top_front_left(const Point3D &p) const {
+    /**
+     * Test if a point is in the top-front-right sub-cuboid.
+     * @param p a point in 3D space.
+     * @return true if p in in the top-front-right sub-cuboid, otherwise false.
+     */
+    [[nodiscard]] bool in_top_front_right(const Point3D &p) const {
 
-        const Point3D m = mid();
-
-        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y < p.y) && (p.y < m.y + Dy() / 2) && (m.z < p.z) &&
-               (p.z < m.z + Dz() / 2);
+        return (mx < p.x) && (p.x < mx + Dx / 2) &&
+               (my < p.y) && (p.y < my + Dy / 2) &&
+               (mz < p.z) && (p.z < mz + Dz / 2);
 
     }
 
-    [[nodiscard]] bool contained_in_top_front_right(const Point3D &p) const {
+    [[nodiscard]] Cuboid bottom_back_left() const {
+        return {mx - Dx / 4, my - Dy / 4, mz - Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
 
-        const Point3D m = mid();
+    [[nodiscard]] Cuboid bottom_back_right() const {
+        return {mx + Dx / 4, my - Dy / 4, mz - Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
 
-        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y < p.y) && (p.y < m.y + Dy() / 2) && (m.z < p.z) &&
-               (p.z < m.z + Dz() / 2);
+    [[nodiscard]] Cuboid bottom_front_left() const {
+        return {mx - Dx / 4, my - Dy / 4, mz + Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
 
+    [[nodiscard]] Cuboid bottom_front_right() const {
+        return {mx + Dx / 4, my - Dy / 4, mz + Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
+
+    [[nodiscard]] Cuboid top_back_left() const {
+        return {mx - Dx / 4, my + Dy / 4, mz - Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
+
+    [[nodiscard]] Cuboid top_back_right() const {
+        return {mx + Dx / 4, my + Dy / 4, mz - Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
+
+    [[nodiscard]] Cuboid top_front_left() const {
+        return {mx - Dx / 4, my + Dy / 4, mz + Dz / 4, Dx / 2, Dy / 2, Dz / 2};
+    }
+
+    [[nodiscard]] Cuboid top_front_right() const {
+        return {mx + Dx / 4, my + Dy / 4, mz + Dz / 4, Dx / 2, Dy / 2, Dz / 2};
     }
 
 private:
 
-    void set_points(double xm, double ym, double zm, double Dx, double Dy, double Dz) {
-
-        _Dx = Dx;
-        _Dy = Dy;
-        _Dz = Dz;
-
-        _p00 = {xm - Dx / 2, ym + Dy / 2, zm + Dz / 2};
-        _p01 = {xm - Dx / 2, ym, zm + Dz / 2};
-        _p02 = {xm - Dx / 2, ym - Dy / 2, zm + Dz / 2};
-        _p03 = {xm, ym + Dy / 2, zm + Dz / 2};
-        _p04 = {xm, ym, zm + Dz / 2};
-        _p05 = {xm, ym - Dy / 2, zm + Dz / 2};
-        _p06 = {xm + Dx / 2, ym + Dy / 2, zm + Dz / 2};
-        _p07 = {xm + Dx / 2, ym, zm + Dz / 2};
-        _p08 = {xm + Dx / 2, ym - Dy / 2, zm + Dz / 2};
-
-        _p09 = {xm - Dx / 2, ym + Dy / 2, zm};
-        _p10 = {xm - Dx / 2, ym, zm};
-        _p11 = {xm - Dx / 2, ym - Dy / 2, zm};
-        _p12 = {xm, ym + Dy / 2, zm};
-        _p13 = {xm, ym, zm};
-        _p14 = {xm, ym - Dy / 2, zm};
-        _p15 = {xm + Dx / 2, ym + Dy / 2, zm};
-        _p16 = {xm + Dx / 2, ym, zm};
-        _p17 = {xm + Dx / 2, ym - Dy / 2, zm};
-
-        _p18 = {xm - Dx / 2, ym + Dy / 2, zm - Dz / 2};
-        _p19 = {xm - Dx / 2, ym, zm - Dz / 2};
-        _p20 = {xm - Dx / 2, ym - Dy / 2, zm - Dz / 2};
-        _p21 = {xm, ym + Dy / 2, zm - Dz / 2};
-        _p22 = {xm, ym, zm - Dz / 2};
-        _p23 = {xm, ym - Dy / 2, zm - Dz / 2};
-        _p24 = {xm + Dx / 2, ym + Dy / 2, zm - Dz / 2};
-        _p25 = {xm + Dx / 2, ym, zm - Dz / 2};
-        _p26 = {xm + Dx / 2, ym - Dy / 2, zm - Dz / 2};
-
-    }
-
-    double _Dx, _Dy, _Dz;
-
-    Point3D _p00;
-    Point3D _p01;
-    Point3D _p02;
-    Point3D _p03;
-    Point3D _p04;
-    Point3D _p05;
-    Point3D _p06;
-    Point3D _p07;
-    Point3D _p08;
-    Point3D _p09;
-    Point3D _p10;
-    Point3D _p11;
-    Point3D _p12;
-    Point3D _p13;
-    Point3D _p14;
-    Point3D _p15;
-    Point3D _p16;
-    Point3D _p17;
-    Point3D _p18;
-    Point3D _p19;
-    Point3D _p20;
-    Point3D _p21;
-    Point3D _p22;
-    Point3D _p23;
-    Point3D _p24;
-    Point3D _p25;
-    Point3D _p26;
+    double mx, my, mz;
+    double Dx, Dy, Dz;
 
 };

@@ -169,7 +169,7 @@ template<typename VectorsType, typename CoeffsType, int Side> class HouseholderS
       * Constructs the Householder sequence with coefficients given by \p h and vectors given by \p v. The
       * i-th Householder coefficient \f$ h_i \f$ is given by \p h(i) and the essential part of the i-th
       * Householder vector \f$ v_i \f$ is given by \p v(k,i) with \p k > \p i (the subdiagonal part of the
-      * i-th column). If \p v has fewer columns than rows, then the Householder sequence contains as many
+      * i-th column). If \p v has fewer columns than rows, then the Householder sequence in as many
       * Householder reflections as there are columns.
       *
       * \note The %HouseholderSequence object stores \p v and \p h by reference.

@@ -52,7 +52,7 @@ namespace Eigen {
   * pseudoEigenvectors() methods allow the construction of the
   * pseudo-eigendecomposition.
   *
-  * The documentation for EigenSolver(const MatrixType&, bool) contains an
+  * The documentation for EigenSolver(const MatrixType&, bool) in an
   * example of the typical use of this class.
   *
   * \note The implementation is adapted from
@@ -277,7 +277,7 @@ template<typename _MatrixType> class EigenSolver
     template<typename InputType>
     EigenSolver& compute(const EigenBase<InputType>& matrix, bool computeEigenvectors = true);
 
-    /** \returns NumericalIssue if the input contains INF or NaN values or overflow occurred. Returns Success otherwise. */
+    /** \returns NumericalIssue if the input in INF or NaN values or overflow occurred. Returns Success otherwise. */
     ComputationInfo info() const
     {
       eigen_assert(m_isInitialized && "EigenSolver is not initialized.");

@@ -49,7 +49,7 @@ struct traits<HessenbergDecompositionMatrixHReturnType<MatrixType> >
   * computed, you can use the matrixH() and matrixQ() functions to construct
   * the matrices H and Q in the decomposition.
   *
-  * The documentation for matrixH() contains an example of the typical use of
+  * The documentation for matrixH() in an example of the typical use of
   * this class.
   *
   * \sa class ComplexSchur, class Tridiagonalization, \ref QR_Module "QR Module"
@@ -191,9 +191,9 @@ template<typename _MatrixType> class HessenbergDecomposition
       * or the member function compute(const MatrixType&) has been called
       * before to compute the Hessenberg decomposition of a matrix.
       *
-      * The returned matrix contains the following information:
+      * The returned matrix in the following information:
       *  - the upper part and lower sub-diagonal represent the Hessenberg matrix H
-      *  - the rest of the lower part contains the Householder vectors that, combined with
+      *  - the rest of the lower part in the Householder vectors that, combined with
       *    Householder coefficients returned by householderCoefficients(),
       *    allows to reconstruct the matrix Q as
       *       \f$ Q = H_{N-1} \ldots H_1 H_0 \f$.
@@ -250,7 +250,7 @@ template<typename _MatrixType> class HessenbergDecomposition
       * The object returned by this function constructs the Hessenberg matrix H
       * when it is assigned to a matrix or otherwise evaluated. The matrix H is
       * constructed from the packed matrix as returned by packedMatrix(): The
-      * upper part (including the subdiagonal) of the packed matrix contains
+      * upper part (including the subdiagonal) of the packed matrix in
       * the matrix H. It may sometimes be better to directly use the packed
       * matrix instead of constructing the matrix H.
       *

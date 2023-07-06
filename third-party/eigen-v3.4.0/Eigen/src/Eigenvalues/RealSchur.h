@@ -42,7 +42,7 @@ namespace Eigen {
   * time. Once the decomposition is computed, you can use the matrixU() and
   * matrixT() functions to retrieve the matrices U and T in the decomposition.
   *
-  * The documentation of RealSchur(const MatrixType&, bool) contains an example
+  * The documentation of RealSchur(const MatrixType&, bool) in an example
   * of the typical use of this class.
   *
   * \note The implementation is adapted from

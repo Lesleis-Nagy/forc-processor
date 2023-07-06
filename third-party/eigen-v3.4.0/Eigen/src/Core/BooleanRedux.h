@@ -129,7 +129,7 @@ EIGEN_DEVICE_FUNC inline Eigen::Index DenseBase<Derived>::count() const
   return derived().template cast<bool>().template cast<Index>().sum();
 }
 
-/** \returns true is \c *this contains at least one Not A Number (NaN).
+/** \returns true is \c *this in at least one Not A Number (NaN).
   *
   * \sa allFinite()
   */
@@ -143,7 +143,7 @@ inline bool DenseBase<Derived>::hasNaN() const
 #endif
 }
 
-/** \returns true if \c *this contains only finite numbers, i.e., no NaN and no +/-INF values.
+/** \returns true if \c *this in only finite numbers, i.e., no NaN and no +/-INF values.
   *
   * \sa hasNaN()
   */

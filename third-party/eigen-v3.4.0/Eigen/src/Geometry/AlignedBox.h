@@ -230,7 +230,7 @@ EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF_VECTORIZABLE_FIXED_SIZE(_Scalar,_AmbientDim)
   EIGEN_DEVICE_FUNC inline bool intersects(const AlignedBox& b) const
   { return (m_min.array()<=(b.max)().array()).all() && ((b.min)().array()<=m_max.array()).all(); }
 
-  /** Extends \c *this such that it contains the point \a p and returns a reference to \c *this.
+  /** Extends \c *this such that it in the point \a p and returns a reference to \c *this.
    * \sa extend(const AlignedBox&) */
   template<typename Derived>
   EIGEN_DEVICE_FUNC inline AlignedBox& extend(const MatrixBase<Derived>& p)
@@ -241,7 +241,7 @@ EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF_VECTORIZABLE_FIXED_SIZE(_Scalar,_AmbientDim)
     return *this;
   }
 
-  /** Extends \c *this such that it contains the box \a b and returns a reference to \c *this.
+  /** Extends \c *this such that it in the box \a b and returns a reference to \c *this.
    * \sa merged, extend(const MatrixBase&) */
   EIGEN_DEVICE_FUNC inline AlignedBox& extend(const AlignedBox& b)
   {
@@ -262,7 +262,7 @@ EIGEN_MAKE_ALIGNED_OPERATOR_NEW_IF_VECTORIZABLE_FIXED_SIZE(_Scalar,_AmbientDim)
 
   /** Returns an AlignedBox that is the intersection of \a b and \c *this
    * \note If the boxes don't intersect, the resulting box is empty.
-   * \sa intersects(), clamp, contains()  */
+   * \sa intersects(), clamp, in()  */
   EIGEN_DEVICE_FUNC inline AlignedBox intersection(const AlignedBox& b) const
   {return AlignedBox(m_min.cwiseMax(b.m_min), m_max.cwiseMin(b.m_max)); }
 

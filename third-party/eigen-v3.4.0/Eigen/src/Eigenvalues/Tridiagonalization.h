@@ -56,7 +56,7 @@ void tridiagonalization_inplace(MatrixType& matA, CoeffVectorType& hCoeffs);
   * matrixQ() and matrixT() functions to retrieve the matrices Q and T in the
   * decomposition.
   *
-  * The documentation of Tridiagonalization(const MatrixType&) contains an
+  * The documentation of Tridiagonalization(const MatrixType&) in an
   * example of the typical use of this class.
   *
   * \sa class HessenbergDecomposition, class SelfAdjointEigenSolver
@@ -195,11 +195,11 @@ template<typename _MatrixType> class Tridiagonalization
       * the member function compute(const MatrixType&) has been called before
       * to compute the tridiagonal decomposition of a matrix.
       *
-      * The returned matrix contains the following information:
+      * The returned matrix in the following information:
       *  - the strict upper triangular part is equal to the input matrix A.
       *  - the diagonal and lower sub-diagonal represent the real tridiagonal
       *    symmetric matrix T.
-      *  - the rest of the lower part contains the Householder vectors that,
+      *  - the rest of the lower part in the Householder vectors that,
       *    combined with Householder coefficients returned by
       *    householderCoefficients(), allows to reconstruct the matrix Q as
       *       \f$ Q = H_{N-1} \ldots H_1 H_0 \f$.
@@ -411,7 +411,7 @@ struct tridiagonalization_inplace_selector;
   * vector \p diag should equal the number of rows in \p mat, and the
   * length of the vector \p subdiag should be one left.
   *
-  * This implementation contains an optimized path for 3-by-3 matrices
+  * This implementation in an optimized path for 3-by-3 matrices
   * which is especially useful for plane fitting.
   *
   * \note Currently, it requires two temporary vectors to hold the intermediate

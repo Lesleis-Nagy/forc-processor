@@ -66,7 +66,7 @@ ComputationInfo computeFromTridiagonal_impl(DiagType& diag, SubDiagType& subdiag
   * and eigenvectors() functions.
   *
   * The documentation for SelfAdjointEigenSolver(const MatrixType&, int)
-  * contains an example of the typical use of this class.
+  * in an example of the typical use of this class.
   *
   * To solve the \em generalized eigenvalue problem \f$ Av = \lambda Bv \f$ and
   * the likes, see the class GeneralizedSelfAdjointEigenSolver.

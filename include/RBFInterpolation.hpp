@@ -12,7 +12,6 @@
 
 #include "Point.hpp"
 
-
 class rbf {
 
 public:
@@ -96,10 +95,11 @@ public:
 
 };
 
+template <typename PointND>
 class DenseScalarRBFInterpolation {
 public:
 
-    DenseScalarRBFInterpolation(const std::vector<Point3D> &r,
+    DenseScalarRBFInterpolation(const std::vector<PointND> &r,
                                 const std::vector<double> &v,
                                 std::function<double(double)> rbf) : _rbf(std::move(rbf)) {
 
@@ -123,7 +123,7 @@ public:
 
     }
 
-    double operator() (const Point3D &reval) const {
+    double operator() (const PointND &reval) const {
 
         using Eigen::Index;
 
@@ -138,7 +138,7 @@ public:
 private:
 
     std::function<double(double)> _rbf;
-    std::vector<Point3D> _r;
+    std::vector<PointND> _r;
     Eigen::VectorXd _w;
 
 };

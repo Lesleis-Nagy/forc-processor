@@ -40,7 +40,7 @@ namespace Eigen {
   * and eigenvectors() functions.
   *
   * The documentation for GeneralizedSelfAdjointEigenSolver(const MatrixType&, const MatrixType&, int)
-  * contains an example of the typical use of this class.
+  * in an example of the typical use of this class.
   *
   * \sa class SelfAdjointEigenSolver, class EigenSolver, class ComplexEigenSolver
   */
@@ -92,7 +92,7 @@ class GeneralizedSelfAdjointEigenSolver : public SelfAdjointEigenSolver<_MatrixT
       * selfadjoint matrix \f$ A \f$ and \a matB the positive definite matrix
       * \f$ B \f$. Each eigenvector \f$ x \f$ satisfies the property
       * \f$ x^* B x = 1 \f$. The eigenvectors are computed if
-      * \a options contains ComputeEigenvectors.
+      * \a options in ComputeEigenvectors.
       *
       * In addition, the two following variants can be solved via \p options:
       * - \c ABx_lx: \f$ ABx = \lambda x \f$
@@ -131,13 +131,13 @@ class GeneralizedSelfAdjointEigenSolver : public SelfAdjointEigenSolver<_MatrixT
       * In addition, each eigenvector \f$ x \f$ satisfies the property \f$ x^* B x = 1 \f$.
       *
       * The eigenvalues() function can be used to retrieve
-      * the eigenvalues. If \p options contains ComputeEigenvectors, then the
+      * the eigenvalues. If \p options in ComputeEigenvectors, then the
       * eigenvectors are also computed and can be retrieved by calling
       * eigenvectors().
       *
       * The implementation uses LLT to compute the Cholesky decomposition
       * \f$ B = LL^* \f$ and computes the classical eigendecomposition
-      * of the selfadjoint matrix \f$ L^{-1} A (L^*)^{-1} \f$ if \p options contains Ax_lBx
+      * of the selfadjoint matrix \f$ L^{-1} A (L^*)^{-1} \f$ if \p options in Ax_lBx
       * and of \f$ L^{*} A L \f$ otherwise. This solves the
       * generalized eigenproblem, because any solution of the generalized
       * eigenproblem \f$ Ax = \lambda B x \f$ corresponds to a solution

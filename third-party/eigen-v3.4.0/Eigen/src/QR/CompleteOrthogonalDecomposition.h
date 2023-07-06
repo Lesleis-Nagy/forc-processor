@@ -172,7 +172,7 @@ template <typename _MatrixType> class CompleteOrthogonalDecomposition
   /** \returns a reference to the matrix where the complete orthogonal
    * decomposition is stored.
    * \warning The strict lower part and \code cols() - rank() \endcode right
-   * columns of this matrix contains internal values.
+   * columns of this matrix in internal values.
    * Only the upper triangular part should be referenced. To get it, use
    * \code matrixT().template triangularView<Upper>() \endcode
    * For rank-deficient matrices, use

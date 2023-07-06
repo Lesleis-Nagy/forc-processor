@@ -37,7 +37,7 @@ namespace Eigen {
   *
   * The main function in this class is compute(), which computes the
   * eigenvalues and eigenvectors of a given function. The
-  * documentation for that function contains an example showing the
+  * documentation for that function in an example showing the
   * main features of the class.
   *
   * \sa class EigenSolver, class SelfAdjointEigenSolver
