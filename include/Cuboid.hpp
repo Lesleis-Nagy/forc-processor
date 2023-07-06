@@ -32,7 +32,7 @@ public:
      * Retrieve the cuboid's mid point.
      * @return  the cuboid mid point.
      */
-    const Point3D &mid() const {
+    [[nodiscard]] const Point3D &mid() const {
         return _p13;
     }
 
@@ -40,7 +40,7 @@ public:
      * Retrieve the cuboid's x-length (x-diameter).
      * @return the cuboid's x-length (x-diameter).
      */
-    double Dx() const {
+    [[nodiscard]] double Dx() const {
         return _Dx;
     }
 
@@ -48,7 +48,7 @@ public:
      * Retrieve the cuboid's y-length (y-diameter).
      * @return the cuboid's y-length (y-diameter).
      */
-    double Dy() const {
+    [[nodiscard]] double Dy() const {
         return _Dy;
     }
 
@@ -56,30 +56,90 @@ public:
      * Retrieve the cuboid's z-length (z-diameter).
      * @return the cuboid's z-length (z-diameter).
      */
-    double Dz() const {
+    [[nodiscard]] double Dz() const {
         return _Dz;
     }
 
-    bool contains(const Point3D &p) const {
+    [[nodiscard]] bool contains(const Point3D &p) const {
 
         const Point3D m = mid();
 
-        return (m.x - Dx() / 2 < p.x) && (p.x < m.x + Dx() / 2) &&
-                (m.y - Dy() / 2 < p.y) && (p.y < m.y + Dy() / 2) &&
-                (m.z - Dz() / 2 < p.z) && (p.z < m.z + Dz() / 2);
+        return (m.x - Dx() / 2 < p.x) && (p.x < m.x + Dx() / 2) && (m.y - Dy() / 2 < p.y) && (p.y < m.y + Dy() / 2) &&
+               (m.z - Dz() / 2 < p.z) && (p.z < m.z + Dz() / 2);
 
     }
 
-    bool contained_in_bottom_back_left(const Point3D &p) const {
+    [[nodiscard]] bool contained_in_bottom_back_left(const Point3D &p) const {
 
         const Point3D m = mid();
 
-        return (m.x - Dx()/2 < p.x) && (p.x < m.x) &&
-                (m.y - Dy()/2 < p.y) && (p.y < m.y) &&
-                (m.z - Dz()/2 < p.z) && (p.z < m.z);
+        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) &&
+               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
 
     }
 
+    [[nodiscard]] bool contained_in_bottom_back_right(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) &&
+               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
+
+    }
+
+    [[nodiscard]] bool contained_in_bottom_front_left(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) && (m.z < p.z) &&
+               (p.z < m.z + Dz() / 2);
+
+    }
+
+    [[nodiscard]] bool contained_in_bottom_front_right(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y - Dy() / 2 < p.y) && (p.y < m.y) && (m.z < p.z) &&
+               (p.z < m.z + Dz() / 2);
+
+    }
+
+    [[nodiscard]] bool contained_in_top_back_left(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y < p.y) && (p.y < m.y + Dy() / 2) &&
+               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
+
+    }
+
+    [[nodiscard]] bool contained_in_top_back_right(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y < p.y) && (p.y < m.y + Dy() / 2) &&
+               (m.z - Dz() / 2 < p.z) && (p.z < m.z);
+
+    }
+
+    [[nodiscard]] bool contained_in_top_front_left(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x - Dx() / 2 < p.x) && (p.x < m.x) && (m.y < p.y) && (p.y < m.y + Dy() / 2) && (m.z < p.z) &&
+               (p.z < m.z + Dz() / 2);
+
+    }
+
+    [[nodiscard]] bool contained_in_top_front_right(const Point3D &p) const {
+
+        const Point3D m = mid();
+
+        return (m.x < p.x) && (p.x < m.x + Dx() / 2) && (m.y < p.y) && (p.y < m.y + Dy() / 2) && (m.z < p.z) &&
+               (p.z < m.z + Dz() / 2);
+
+    }
 
 private:
 

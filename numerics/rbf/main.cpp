@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     std::vector<double> tvals;
     eval_at_regular_points(tpts, tvals, -M_PI, M_PI, -M_PI, M_PI, -M_PI, M_PI, 100, 100, 100, test_fun);
 
-    DenseScalarRBFInterpolation interp(ipts, ivals, RBFFactory::multiquadric(3.0));
+    DenseScalarRBFInterpolation interp(ipts, ivals, rbf::multiquadric(3.0));
 
     std::vector<Point3D> apts;
     std::vector<double> avals;
