@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <cmath>
 
 struct Point3D {
@@ -40,4 +41,9 @@ double dot(const Point3D &a, const Point3D &b) {
 
 double distance(const Point3D &a, const Point3D &b) {
     return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+}
+
+std::ostream &operator<< (std::ostream &out, const Point3D& v) {
+    out << "<" << v.x << ", " << v.y << ", " << v.z << ">";
+    return out;
 }
