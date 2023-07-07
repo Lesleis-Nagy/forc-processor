@@ -6,8 +6,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(MIMG_GRAMMAR_DIR "${CMAKE_SOURCE_DIR}/grammar")
 set(MIMG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
-set(MIMG_NUMERICS_DIR "${CMAKE_SOURCE_DIR}/numerics")
 set(MIMG_SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+set(MIMG_SRC_LIB_DIR "${CMAKE_SOURCE_DIR}/src-lib")
 set(MIMG_TEST_DIR "${CMAKE_SOURCE_DIR}/test")
 set(MIMG_THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}/third-party")
 set(MIMG_TOYS_DIR "${CMAKE_SOURCE_DIR}/toys")
@@ -30,8 +30,8 @@ setup_antlr4()
 #find_package(VTK REQUIRED)
 find_package(HDF5 COMPONENTS CXX HL REQUIRED)
 
-# Descend in to the numerics subdirectory.
-add_subdirectory(${MIMG_NUMERICS_DIR})
+# Descend in to the src-lib subdirectory.
+add_subdirectory(${MIMG_SRC_LIB_DIR})
 
 # Descend in to the test subdirectory.
 add_subdirectory(${MIMG_TEST_DIR})
