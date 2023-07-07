@@ -6,8 +6,8 @@
 
 #include <args.hxx>
 
-#include "TecplotFORCReader.hpp"
-#include "HDF5FORCWriter.hpp"
+#include "tecplot_forc_reader.hpp"
+#include "hdf5_forc_writer.hpp"
 
 int main(int argc, char *argv[]) {
 

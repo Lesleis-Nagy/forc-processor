@@ -9,7 +9,7 @@
 
 #include <H5Cpp.h>
 
-#include "TecplotFORCReader.hpp"
+#include "tecplot_forc_reader.hpp"
 
 class HDF5FORCWriter {
 
