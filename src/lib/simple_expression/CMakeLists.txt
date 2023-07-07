@@ -12,7 +12,7 @@ add_custom_target(mimg_simple_expression_antlr4
                           ${ANTLR4_GEN_INCLUDES}/SimpleExpressionVisitor.cpp)
 
 add_library(mimg_simple_expression
-        SimpleExpression.cpp
+        simple_expression.cpp
         ${ANTLR4_GEN_INCLUDES}/SimpleExpressionBaseVisitor.cpp
         ${ANTLR4_GEN_INCLUDES}/SimpleExpressionLexer.cpp
         ${ANTLR4_GEN_INCLUDES}/SimpleExpressionParser.cpp
