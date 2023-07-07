@@ -15,7 +15,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Fraction.hpp"
+#include "fraction.hpp"
 
 template <> struct std::hash <std::pair<int, int>> {
 

@@ -1,5 +1,5 @@
 add_subdirectory(cuboid)
-add_subdirectory(FixedPoint)
+add_subdirectory(fraction)
 add_subdirectory(RBFInterpolation)
 add_subdirectory(Rectangle)
 add_subdirectory(SimpleExpression)

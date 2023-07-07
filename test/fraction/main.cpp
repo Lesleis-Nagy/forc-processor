@@ -6,7 +6,7 @@
 
 #include <catch/catch.hpp>
 
-#include "Fraction.hpp"
+#include "fraction.hpp"
 
 
 TEST_CASE("Test normal operation", "part 1") {
