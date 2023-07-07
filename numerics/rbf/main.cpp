@@ -2,7 +2,7 @@
 // Created by L. Nagy on 05/07/2023.
 //
 
-#include "point_evaluation.hpp"
+#include "point_populator.hpp"
 #include "rbf_interpolation.hpp"
 
 #define M_PI 3.14159265358979323846

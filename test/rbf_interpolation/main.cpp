@@ -6,7 +6,7 @@
 
 #include <catch/catch.hpp>
 
-#include "point_evaluation.hpp"
+#include "point_populator.hpp"
 #include "rbf_interpolation.hpp"
 
 const double eps = 1e-10;
