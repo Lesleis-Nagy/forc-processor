@@ -8,7 +8,7 @@
 #include <string>
 #include <sstream>
 
-#include "Utilities.hpp"
+#include "utilities.hpp"
 
 class Fraction {
 

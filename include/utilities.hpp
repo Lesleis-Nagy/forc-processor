@@ -4,7 +4,8 @@
 
 #pragma once
 
-template <typename T> long sgn(T val) {
+template <typename T>
+long sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
