@@ -6,7 +6,7 @@
 
 #include <catch/catch.hpp>
 
-#include "SimpleExpression.hpp"
+#include "simple_expression.hpp"
 
 const double eps = 1E-18;
 
