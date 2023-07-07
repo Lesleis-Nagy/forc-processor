@@ -6,7 +6,7 @@
 
 #include <catch/catch.hpp>
 
-#include "Cuboid.hpp"
+#include "cuboid.hpp"
 
 TEST_CASE("Test in_bottom_back_left()") {
 
