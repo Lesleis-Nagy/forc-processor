@@ -1,66 +1,89 @@
 grammar SimpleExpression;
 
 /*-------------------------------------------------------------------------------------------------------------------*/
+/* Parser                                                                                                            */
+/*-------------------------------------------------------------------------------------------------------------------*/
+
+scalar_expression
+    : SIN OPAREN scalar_expression CPAREN
+    | COS OPAREN scalar_expression CPAREN
+    | TAN OPAREN scalar_expression CPAREN
+    | ASIN OPAREN scalar_expression CPAREN
+    | ACOS OPAREN scalar_expression CPAREN
+    | ATAN OPAREN scalar_expression CPAREN
+    | HSIN OPAREN scalar_expression CPAREN
+    | HCOS OPAREN scalar_expression CPAREN
+    | HTAN OPAREN scalar_expression CPAREN
+    | AHSIN OPAREN scalar_expression CPAREN
+    | AHCOS OPAREN scalar_expression CPAREN
+    | AHTAN OPAREN scalar_expression CPAREN
+    | EXP OPAREN scalar_expression CPAREN
+    | LOG OPAREN scalar_expression CPAREN
+    | LN OPAREN scalar_expression CPAREN
+    | scalar_expression POWER scalar_expression
+    | scalar_expression mult_div=(MULTIPLY | DIVIDE) scalar_expression
+    | scalar_expression plus_minus=(PLUS | MINUS) scalar_expression
+    | OPAREN scalar_expression CPAREN
+    | variable
+    | number
+    ;
+
+number
+    : Integer
+    | Float
+    ;
+
+variable
+    : X
+    | Y
+    | Z
+    ;
+
+
+/*-------------------------------------------------------------------------------------------------------------------*/
 /* Lexer                                                                                                             */
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 // TOKENS
-OPAREN:   '(' ;
-CPAREN:   ')' ;
-DECIMAL:  '.' ;
-NEGATIVE: '-' ;
-POSITIVE: '+' ;
+OANGLE:   '<'  ;
+CANGLE:   '>'  ;
+OPAREN:   '('  ;
+CPAREN:   ')'  ;
+DECIMAL:  '.'  ;
+MINUS:    '-'  ;
+PLUS:     '+'  ;
+MULTIPLY: '*'  ;
+DIVIDE:   '/'  ;
+POWER:    '^'  ;
 
-X:    'x'     ;
-Y:    'y'     ;
-Z:    'z'     ;
+X:    'x'      ;
+Y:    'y'      ;
+Z:    'z'      ;
 
-SIN:  'sin'   ;
-COS:  'cos'   ;
-TAN:  'tan'   ;
-ASIN: 'asin'  ;
-ACOS: 'acos'  ;
-ATAN: 'atan'  ;
-HSIN: 'hsin'  ;
-HCOS: 'hcos'  ;
-HTAN: 'htan'  ;
-EXP:  'exp'   ;
-LOG:  'log'   ;
-LG:   'lg'    ;
+SIN:   'sin'   ;
+COS:   'cos'   ;
+TAN:   'tan'   ;
+ASIN:  'asin'  ;
+ACOS:  'acos'  ;
+ATAN:  'atan'  ;
+HSIN:  'hsin'  ;
+HCOS:  'hcos'  ;
+HTAN:  'htan'  ;
+AHSIN: 'ahsin' ;
+AHCOS: 'ahcos' ;
+AHTAN: 'ahtan' ;
+EXP:   'exp'   ;
+LOG:   'log'   ;
+LN:    'ln'    ;
 
-SET:  'set'   ;
-MIN:  'min'   ;
-MAX:  'max'   ;
-TO:   'to'    ;
-
-Float
-  : NEGATIVE? [0-9]+ DECIMAL [0-9]+ 'E' (NEGATIVE | POSITIVE) [0-9]+
+Integer
+  : [0-9]+
   ;
 
-# Creates a 2d scalar function
-FUNCTION myfunc(x,y) = sin(x)cos(y)
+Float
+  : MINUS? [0-9]+ DECIMAL [0-9]+ ('E' (MINUS | PLUS) [0-9]+)?
+  ;
 
-# Creates a 3d scalar function
-FUNCTION myfunc2(x,y,z) = sin(x)cos(y)tan(z)
-
-# Creates a 2d vector function
-FUNCTION myfunc3(x,y) = <sin(x)cos(y), sin(y)cos(x)>
-
-# Creates a 3d vector function
-FUNCTION myfunc4(x,y,z) = <sin(x)cos(y), sin(y)cos(x), sin(z)cos(z)>
-
-# Creates a set of random 2D points
-POINTS myname ARE RANDOM WITH x:minimum=-1 x:maximum=2 y:minimum-1 y:maximum=2 n=100 seed=1337
-
-# Creates a set of uniform 3D points
-POINTS myothername ARE UNIFORM WITH x:minimum=-1 x:maximum=2 y:minimum=-1 y:maximum=2 x:n=100 y:n=200
-
-# Creates an interpolation of func (dimensionalities are checked)
-INTERPOLATION myinterp USING function=myfunc points=mypoints gaussian(1.2)
-
-# Evaluate interpolations/functions
-RESULT myresult = EVALUATE function=myfunc points=mypoints
-RESULT myresult2 = EVALUATE interpolation=myinterp points=mypoints
-
-SAVE myresult TO myfile.csv
-SAVE myresult2 TO myfile2.csv
+WhiteSpace
+  : [ \n\t\r]+ -> skip
+  ;
