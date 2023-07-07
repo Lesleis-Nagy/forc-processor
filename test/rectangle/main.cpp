@@ -6,7 +6,7 @@
 
 #include <catch/catch.hpp>
 
-#include "Rectangle.hpp"
+#include "rectangle.hpp"
 
 const double eps = 1E-18;
 
