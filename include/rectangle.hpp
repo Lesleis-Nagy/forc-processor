@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Point.hpp"
+#include "point.hpp"
 
 /**
  * A class to encode the concept of a rectangle. The rectangle is defined by a midpoint and the edge lengths Dx & Dy.

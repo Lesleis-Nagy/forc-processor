@@ -7,7 +7,7 @@
 #include <functional>
 #include <random>
 
-#include "Point.hpp"
+#include "point.hpp"
 
 void eval_at_regular_points(std::vector<Point3D> &r, std::vector<double> &v,
                             double x_min, double x_max,

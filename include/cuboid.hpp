@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Point.hpp"
+#include "point.hpp"
 
 /**
  * A class to encode the concept of a cuboid - the three dimensional analogue of a rectangle. The cuboid is defined

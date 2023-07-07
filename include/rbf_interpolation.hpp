@@ -10,7 +10,7 @@
 
 #include <Eigen/Dense>
 
-#include "Point.hpp"
+#include "point.hpp"
 
 class rbf {
 
