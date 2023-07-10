@@ -4,26 +4,40 @@ grammar SimpleExpression;
 /* Parser                                                                                                            */
 /*-------------------------------------------------------------------------------------------------------------------*/
 
-scalar_expression
-    : SIN OPAREN scalar_expression CPAREN
-    | COS OPAREN scalar_expression CPAREN
-    | TAN OPAREN scalar_expression CPAREN
-    | ASIN OPAREN scalar_expression CPAREN
-    | ACOS OPAREN scalar_expression CPAREN
-    | ATAN OPAREN scalar_expression CPAREN
-    | HSIN OPAREN scalar_expression CPAREN
-    | HCOS OPAREN scalar_expression CPAREN
-    | HTAN OPAREN scalar_expression CPAREN
-    | AHSIN OPAREN scalar_expression CPAREN
-    | AHCOS OPAREN scalar_expression CPAREN
-    | AHTAN OPAREN scalar_expression CPAREN
-    | EXP OPAREN scalar_expression CPAREN
-    | LOG OPAREN scalar_expression CPAREN
-    | LN OPAREN scalar_expression CPAREN
-    | scalar_expression POWER scalar_expression
-    | scalar_expression mult_div=(MULTIPLY | DIVIDE) scalar_expression
-    | scalar_expression plus_minus=(PLUS | MINUS) scalar_expression
-    | OPAREN scalar_expression CPAREN
+expression
+    : scalarExpression
+    | vectorExpression2D
+    | vectorExpression3D
+    ;
+
+vectorExpression2D
+    : OANGLE scalarExpression COMMA scalarExpression CANGLE
+    ;
+
+vectorExpression3D
+    : OANGLE scalarExpression COMMA scalarExpression COMMA scalarExpression CANGLE
+    ;
+
+scalarExpression
+    : SIN OPAREN scalarExpression CPAREN
+    | COS OPAREN scalarExpression CPAREN
+    | TAN OPAREN scalarExpression CPAREN
+    | ASIN OPAREN scalarExpression CPAREN
+    | ACOS OPAREN scalarExpression CPAREN
+    | ATAN OPAREN scalarExpression CPAREN
+    | SINH OPAREN scalarExpression CPAREN
+    | COSH OPAREN scalarExpression CPAREN
+    | TANH OPAREN scalarExpression CPAREN
+    | ASINH OPAREN scalarExpression CPAREN
+    | ACOSH OPAREN scalarExpression CPAREN
+    | ATANH OPAREN scalarExpression CPAREN
+    | EXP OPAREN scalarExpression CPAREN
+    | LOG OPAREN scalarExpression CPAREN
+    | LN OPAREN scalarExpression CPAREN
+    | scalarExpression POWER scalarExpression
+    | scalarExpression mult_div=(MULTIPLY | DIVIDE) scalarExpression
+    | scalarExpression plus_minus=(PLUS | MINUS) scalarExpression
+    | OPAREN scalarExpression CPAREN
     | variable
     | number
     ;
@@ -49,6 +63,7 @@ OANGLE:   '<'  ;
 CANGLE:   '>'  ;
 OPAREN:   '('  ;
 CPAREN:   ')'  ;
+COMMA:    ','  ;
 DECIMAL:  '.'  ;
 MINUS:    '-'  ;
 PLUS:     '+'  ;
@@ -66,12 +81,12 @@ TAN:   'tan'   ;
 ASIN:  'asin'  ;
 ACOS:  'acos'  ;
 ATAN:  'atan'  ;
-HSIN:  'hsin'  ;
-HCOS:  'hcos'  ;
-HTAN:  'htan'  ;
-AHSIN: 'ahsin' ;
-AHCOS: 'ahcos' ;
-AHTAN: 'ahtan' ;
+SINH:  'sinh'  ;
+COSH:  'cosh'  ;
+TANH:  'tanh'  ;
+ASINH: 'asinh' ;
+ACOSH: 'acosh' ;
+ATANH: 'atanh' ;
 EXP:   'exp'   ;
 LOG:   'log'   ;
 LN:    'ln'    ;
