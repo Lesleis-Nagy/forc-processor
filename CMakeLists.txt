@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.25)
 project(mimg)
 
 set(CMAKE_CXX_STANDARD 20)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 set(MIMG_GRAMMAR_DIR "${CMAKE_SOURCE_DIR}/grammar")
 set(MIMG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
@@ -20,10 +19,6 @@ set(MIMG_ARGS_INCLUDE_DIR "${MIMG_THIRD_PARTY_DIR}/args-v6.3.0/include")
 set(MIMG_CATCH2_INCLUDE_DIR "${MIMG_THIRD_PARTY_DIR}/catch2-v2.13.9/include")
 set(MIMG_RAPIDJSON_INCLUDE_DIR "${MIMG_THIRD_PARTY_DIR}/rapidjson-v1.1.0/include")
 set(MIMG_EIGEN_INCLUDE_DIR "${MIMG_THIRD_PARTY_DIR}/eigen-v3.4.0")
-
-
-include(antlr4)
-setup_antlr4()
 
 # Find packages.
 

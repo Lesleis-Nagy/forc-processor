@@ -4,132 +4,379 @@
 
 #include "simple_expression.hpp"
 
-void SimpleExpressionListenerImpl::enterScalarExpression(SimpleExpressionParser::ScalarExpressionContext *ctx) {
+namespace mimg {
 
-    if (ctx->variable()) {
-        if (ctx->variable()->X()) {
-            std::cout << ctx->variable()->X()->getText() << std::endl;
-            _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::X, 0.0});
+    double SimpleScalarCalculator::operator()(double x, double y, double z) const {
+
+        using std::ranges::views::reverse;
+        using std::stack;
+        using std::sin, std::cos, std::tan;
+        using std::asin, std::acos, std::atan;
+        using std::sinh, std::cosh, std::tanh;
+        using std::asinh, std::acosh, std::atanh;
+        using std::exp, std::log10, std::log;
+
+        stack<double> compute_stack;
+
+        for (const auto &token: reverse(_expression_queue)) {
+            switch (token.type) {
+                case TOKEN_X:
+                    compute_stack.push(x);
+                    break;
+                case TOKEN_Y:
+                    compute_stack.push(y);
+                    break;
+                case TOKEN_Z:
+                    compute_stack.push(z);
+                    break;
+                case TOKEN_NUMBER:
+                    //compute_stack.push(token.constant);
+                    break;
+                case TOKEN_PLUS:
+                    if (compute_stack.size() < 2) {
+                        throw std::runtime_error("Computation error: stack size cannot feed '+' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        double b = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(a + b);
+                    }
+                    break;
+                case TOKEN_MINUS:
+                    if (compute_stack.size() < 2) {
+                        throw std::runtime_error("Computation error: stack size cannot feed '-' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        double b = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(a - b);
+                    }
+                    break;
+                case TOKEN_MULTIPLY:
+                    if (compute_stack.size() < 2) {
+                        throw std::runtime_error("Computation error: stack size cannot feed '*' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        double b = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(a * b);
+                    }
+                    break;
+                case TOKEN_DIVIDE:
+                    if (compute_stack.size() < 2) {
+                        throw std::runtime_error("Computation error: stack size cannot feed '/' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        double b = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(a / b);
+                    }
+                    break;
+                case TOKEN_POWER:
+                    if (compute_stack.size() < 2) {
+                        throw std::runtime_error("Computation error: stack size cannot feed '^' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        double b = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(pow(a, b));
+                    }
+                    break;
+                case TOKEN_SIN:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'sin' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(sin(a));
+                    }
+                    break;
+                case TOKEN_COS:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'cos' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(cos(a));
+                    }
+                    break;
+                case TOKEN_TAN:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'tan' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(tan(a));
+                    }
+                    break;
+                case TOKEN_ASIN:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'asin' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(asin(a));
+                    }
+                    break;
+                case TOKEN_ACOS:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'acos' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(acos(a));
+                    }
+                    break;
+                case TOKEN_ATAN:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'atan' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(atan(a));
+                    }
+                    break;
+                case TOKEN_SINH:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'sinh' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(sinh(a));
+                    }
+                    break;
+                case TOKEN_COSH:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'cosh' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(cosh(a));
+                    }
+                    break;
+                case TOKEN_TANH:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'tanh' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(tanh(a));
+                    }
+                    break;
+                case TOKEN_ASINH:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'asinh' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(asinh(a));
+                    }
+                    break;
+                case TOKEN_ACOSH:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'acosh' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(acosh(a));
+                    }
+                    break;
+                case TOKEN_ATANH:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'atanh' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(atanh(a));
+                    }
+                    break;
+                case TOKEN_EXP:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'exp' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(exp(a));
+                    }
+                    break;
+                case TOKEN_LOG:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'log' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(log10(a));
+                    }
+                    break;
+                case TOKEN_LN:
+                    if (compute_stack.empty()) {
+                        throw std::runtime_error("Computation error: stack size cannot feed 'ln' operator.");
+                    } else {
+                        double a = compute_stack.top();
+                        compute_stack.pop();
+                        compute_stack.push(log(a));
+                    }
+                    break;
+                default:
+                    throw std::runtime_error("Computation error: unknown token type.");
+            }
         }
-        if (ctx->variable()->Y()) {
-            std::cout << ctx->variable()->Y()->getText() << std::endl;
-            _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::Y, 0.0});
+
+        if (compute_stack.size() != 1) {
+            throw std::runtime_error("Computation error: compute stack didn't evaluate to a single value.");
         }
-        if (ctx->variable()->Z()) {
-            std::cout << ctx->variable()->Z()->getText() << std::endl;
-            _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::Z, 0.0});
+
+        return compute_stack.top();
+
+    }
+
+    std::vector<std::string> SimpleScalarScanner::scan(const char *source) {
+
+        init_scanner(source);
+
+        for (;;) {
+            Token token = scan_token(source);
+            if (token.line != line) {
+                std::cout << token.line;
+                line = token.line;
+            } else {
+                std::cout << "     |";
+            }
+
+            std::cout << token.type << token.length << token.start << std::endl;
+
+            if (token.type == TOKEN_EOF) break;
         }
+
     }
 
-    if (ctx->number()) {
-        std::cout << ctx->number()->getText() << std::endl;
-        _calculator._expression_queue.push_back(
-                {SimpleScalarCalculator::TokenType::CONST, std::stod(ctx->number()->getText())});
+    void SimpleScalarScanner::init_scanner(const char *source) {
+
+        start = source;
+        current = source;
+        line = 1;
+
     }
 
-    if (ctx->PLUS()) {
-        std::cout << ctx->PLUS()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::PLUS, 0.0});
+    void SimpleScalarScanner::skip_whitespace() {
+
+        for (;;) {
+            char c = peek();
+            switch (c) {
+                case ' ':
+                case '\r':
+                case '\t':
+                    advance();
+                    break;
+                case '\n':
+                    line++;
+                    advance();
+                    break;
+                default:
+                    return;
+            }
+        }
+
     }
 
-    if (ctx->MINUS()) {
-        std::cout << ctx->MINUS()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::MINUS, 0.0});
+    Token SimpleScalarScanner::scan_token(const char *source) {
+
+        skip_whitespace();
+
+        start = current;
+
+        if (is_at_end()) {
+            return make_token(TOKEN_EOF);
+        }
+
+        char c = advance();
+
+        if (is_alpha(c)) return identifier();
+        if (is_digit(c)) return number();
+
+        switch (c) {
+            // Single character tokens.
+            case 'x': return make_token(TOKEN_X);
+            case 'y': return make_token(TOKEN_Y);
+            case 'z': return make_token(TOKEN_Z);
+            case '(': return make_token(TOKEN_LEFT_PAREN);
+            case ')': return make_token(TOKEN_RIGHT_PAREN);
+            case '+': return make_token(TOKEN_PLUS);
+            case '-': return make_token(TOKEN_MINUS);
+            case '*': return make_token(TOKEN_MULTIPLY);
+            case '/': return make_token(TOKEN_DIVIDE);
+            case '^': return make_token(TOKEN_POWER);
+            case ',': return make_token(TOKEN_COMMA);
+            case '<': return make_token(TOKEN_LEFT_ANGLE);
+            case '>': return make_token(TOKEN_RIGHT_ANGLE);
+            default: return make_error_token("Unexpected character.");
+
+        }
+
+        return make_error_token("Unexpected character.");
+
     }
 
-    if (ctx->MULTIPLY()) {
-        std::cout << ctx->MULTIPLY()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::MULTIPLY, 0.0});
+    Token SimpleScalarScanner::identifier() {
+        while (is_alpha(peek()) || is_digit(peek())) advance();
+        return make_token(identifier_type());
     }
 
-    if (ctx->DIVIDE()) {
-        std::cout << ctx->DIVIDE()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::DIVIDE, 0.0});
+    TokenType SimpleScalarScanner::identifier_type() {
+        return TOKEN_IDENTIFIER;
     }
 
-    if (ctx->POWER()) {
-        std::cout << ctx->POWER()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::POWER, 0.0});
+    Token SimpleScalarScanner::number() {
+        while (is_digit(peek())) advance ();
+
+        // Look for a fractional part.
+        if (peek() ==  '.' && is_digit(peek_next())) {
+            // Consume the '.'.
+            advance();
+            while (is_digit(peek())) advance();
+        }
+
+        return make_token(TOKEN_NUMBER);
     }
 
-    if (ctx->SIN()) {
-        std::cout << ctx->SIN()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::SIN, 0.0});
+    char SimpleScalarScanner::advance() {
+        current++;
+        return current[-1];
     }
 
-    if (ctx->COS()) {
-        std::cout << ctx->COS()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::COS, 0.0});
+    char SimpleScalarScanner::peek() {
+        return *current;
     }
 
-    if (ctx->TAN()) {
-        std::cout << ctx->TAN()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::TAN, 0.0});
+    char SimpleScalarScanner::peek_next() {
+        if (is_at_end()) return '\0';
+        return current[1];
     }
 
-    if (ctx->ASIN()) {
-        std::cout << ctx->ASIN()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::ASIN, 0.0});
+    bool SimpleScalarScanner::is_at_end() {
+        return *current == '\0';
     }
 
-    if (ctx->ACOS()) {
-        std::cout << ctx->ACOS()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::ACOS, 0.0});
+    bool SimpleScalarScanner::is_alpha(char c) {
+        return (c >= 'a' && c <= 'z') ||
+               (c >= 'A' && c <= 'Z');
     }
 
-    if (ctx->ATAN()) {
-        std::cout << ctx->ATAN()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::ATAN, 0.0});
+    bool SimpleScalarScanner::is_digit(char c) {
+        return c >= '0' && c <= '9';
     }
 
-    if (ctx->SINH()) {
-        std::cout << ctx->SINH()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::SINH, 0.0});
+    Token SimpleScalarScanner::make_token(TokenType type) {
+        return {type, start, (size_t)(current - start), line};
     }
 
-    if (ctx->COSH()) {
-        std::cout << ctx->COSH()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::COSH, 0.0});
+    Token SimpleScalarScanner::make_error_token(const char *message) {
+        return {TOKEN_ERROR, message, (size_t)strlen(message), line};
     }
 
-    if (ctx->TANH()) {
-        std::cout << ctx->TANH()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::TANH, 0.0});
-    }
-
-    if (ctx->ASINH()) {
-        std::cout << ctx->ASINH()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::ASINH, 0.0});
-    }
-
-    if (ctx->ACOSH()) {
-        std::cout << ctx->ACOSH()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::ACOSH, 0.0});
-    }
-
-    if (ctx->ATANH()) {
-        std::cout << ctx->ATANH()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::ATANH, 0.0});
-    }
-
-
-    if (ctx->EXP()) {
-        std::cout << ctx->EXP()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::EXP, 0.0});
-    }
-
-    if (ctx->LOG()) {
-        std::cout << ctx->LOG()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::LOG, 0.0});
-    }
-
-    if (ctx->LN()) {
-        std::cout << ctx->LN()->getText() << std::endl;
-        _calculator._expression_queue.push_back({SimpleScalarCalculator::TokenType::LN, 0.0});
-    }
-
-}
-
-void SimpleExpression::say_hello() {
-    std::cout << "Hello!" << std::endl;
-}
+} // namespace ming.

@@ -1,2 +1,0 @@
-#!/bin/bash
-CLASSPATH="@MIMG_ANTLR4_DIR@/@MIMG_ANTLR4@-complete.jar:." exec "java" -jar @MIMG_ANTLR4_DIR@/@MIMG_ANTLR4@-complete.jar "$@"
