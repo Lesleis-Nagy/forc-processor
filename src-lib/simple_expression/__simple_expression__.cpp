@@ -1,8 +1,11 @@
 //
 // Created by L. Nagy on 07/07/2023.
+// @file simple_expression.cpp
+// @author L. Nagy
+// A simple expression parser to parse and evaluate mathematical expressions with up to three variables - x, y & z.
 //
 
-#include "simple_expression.hpp"
+#include "__simple_expression__.hpp"
 
 namespace mimg {
 
@@ -235,148 +238,442 @@ namespace mimg {
 
     }
 
-    std::vector<std::string> SimpleScalarScanner::scan(const char *source) {
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Scanner                                                                                                       //
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        init_scanner(source);
+    std::vector<Token> SimpleScalarScanner::scan(const std::string &new_source) {
+
+        using std::vector;
+
+        vector<Token> tokens;
+
+        init_scanner(new_source);
 
         for (;;) {
-            Token token = scan_token(source);
-            if (token.line != line) {
-                std::cout << token.line;
-                line = token.line;
-            } else {
-                std::cout << "     |";
-            }
+            Token token = scan_token();
 
-            std::cout << token.type << token.length << token.start << std::endl;
+            tokens.push_back(token);
 
-            if (token.type == TOKEN_EOF) break;
+            if (token.type == TOKEN_END) break;
+
+            if (token.type == TOKEN_ERROR) break;
+
         }
+
+        return tokens;
 
     }
 
-    void SimpleScalarScanner::init_scanner(const char *source) {
+    void SimpleScalarScanner::init_scanner(const std::string &new_source) {
 
-        start = source;
-        current = source;
+        source = new_source;
+        start = 0;
+        current = 0;
         line = 1;
 
     }
 
-    void SimpleScalarScanner::skip_whitespace() {
+    Token SimpleScalarScanner::scan_token() {
+
+        start = current;
+
+        scan_whitespace();
+
+        if (is_at_end()) {
+            return make_token(TOKEN_END);
+        }
+
+        Token tok_identifier = scan_identifier();
+        if (tok_identifier.type == TOKEN_ERROR) {
+            return tok_identifier;
+        }
+        if (tok_identifier.type != TOKEN_NOMATCH) {
+            return tok_identifier;
+        }
+
+        Token tok_number = scan_number();
+        if (tok_number.type == TOKEN_ERROR) {
+            return tok_number;
+        }
+        if (tok_number.type != TOKEN_NOMATCH) {
+            return tok_number;
+        }
+
+        Token tok_operator = scan_operator();
+        if (tok_operator.type == TOKEN_ERROR) {
+            return tok_operator;
+        }
+        if (tok_operator.type != TOKEN_NOMATCH) {
+            return tok_operator;
+        }
+
+        return make_error_token("Token scanning error.");
+
+    }
+
+    void SimpleScalarScanner::scan_whitespace() {
 
         for (;;) {
-            char c = peek();
-            switch (c) {
-                case ' ':
-                case '\r':
-                case '\t':
-                    advance();
-                    break;
-                case '\n':
-                    line++;
-                    advance();
-                    break;
-                default:
-                    return;
+            std::string c = peek();
+
+            if (c == " " || peek() == "\r" ||  peek() == "\t" || peek() == "\n") {
+                advance();
+            } else {
+                return;
             }
         }
 
     }
 
-    Token SimpleScalarScanner::scan_token(const char *source) {
+    Token SimpleScalarScanner::scan_operator() {
 
-        skip_whitespace();
-
-        start = current;
-
-        if (is_at_end()) {
-            return make_token(TOKEN_EOF);
-        }
-
-        char c = advance();
-
-        if (is_alpha(c)) return identifier();
-        if (is_digit(c)) return number();
-
-        switch (c) {
-            // Single character tokens.
-            case 'x': return make_token(TOKEN_X);
-            case 'y': return make_token(TOKEN_Y);
-            case 'z': return make_token(TOKEN_Z);
-            case '(': return make_token(TOKEN_LEFT_PAREN);
-            case ')': return make_token(TOKEN_RIGHT_PAREN);
-            case '+': return make_token(TOKEN_PLUS);
-            case '-': return make_token(TOKEN_MINUS);
-            case '*': return make_token(TOKEN_MULTIPLY);
-            case '/': return make_token(TOKEN_DIVIDE);
-            case '^': return make_token(TOKEN_POWER);
-            case ',': return make_token(TOKEN_COMMA);
-            case '<': return make_token(TOKEN_LEFT_ANGLE);
-            case '>': return make_token(TOKEN_RIGHT_ANGLE);
-            default: return make_error_token("Unexpected character.");
-
-        }
-
-        return make_error_token("Unexpected character.");
-
-    }
-
-    Token SimpleScalarScanner::identifier() {
-        while (is_alpha(peek()) || is_digit(peek())) advance();
-        return make_token(identifier_type());
-    }
-
-    TokenType SimpleScalarScanner::identifier_type() {
-        return TOKEN_IDENTIFIER;
-    }
-
-    Token SimpleScalarScanner::number() {
-        while (is_digit(peek())) advance ();
-
-        // Look for a fractional part.
-        if (peek() ==  '.' && is_digit(peek_next())) {
-            // Consume the '.'.
+        if (peek() == "x") {
             advance();
-            while (is_digit(peek())) advance();
+            return make_token(TOKEN_X);
         }
 
-        return make_token(TOKEN_NUMBER);
+        if (peek() == "y") {
+            advance();
+            return make_token(TOKEN_Y);
+        }
+
+        if (peek() == "z") {
+            advance();
+            return make_token(TOKEN_Z);
+        }
+
+        if (peek() == "(") {
+            advance();
+            return make_token(TOKEN_LEFT_PAREN);
+        }
+
+        if (peek() == ")") {
+            advance();
+            return make_token(TOKEN_RIGHT_PAREN);
+        }
+
+        if (peek() == "+") {
+            advance();
+            return make_token(TOKEN_PLUS);
+        }
+
+        if (peek() == "-") {
+            advance();
+            return make_token(TOKEN_MINUS);
+        }
+
+        if (peek() == "*") {
+            advance();
+            return make_token(TOKEN_MULTIPLY);
+        }
+
+        if (peek() == "/") {
+            advance();
+            return make_token(TOKEN_DIVIDE);
+        }
+
+        if (peek() == "^") {
+            advance();
+            return make_token(TOKEN_POWER);
+        }
+
+        if (peek() == ",") {
+            advance();
+            return make_token(TOKEN_COMMA);
+        }
+
+        if (peek() == "<") {
+            advance();
+            return make_token(TOKEN_LEFT_ANGLE);
+        }
+
+        if (peek() == ">") {
+            advance();
+            return make_token(TOKEN_RIGHT_ANGLE);
+        }
+
+        return make_token(TOKEN_NOMATCH);
+
     }
 
-    char SimpleScalarScanner::advance() {
-        current++;
-        return current[-1];
+    Token SimpleScalarScanner::scan_identifier() {
+
+        if (peek(5) == "asinh") {
+            advance(5);
+            return make_token(TOKEN_ASINH);
+        }
+
+        if (peek(5) == "acosh") {
+            advance(5);
+            return make_token(TOKEN_ACOSH);
+        }
+
+        if (peek(5) == "atanh") {
+            advance(5);
+            return make_token(TOKEN_ATANH);
+        }
+
+        if (peek(4) == "sinh") {
+            advance(4);
+            return make_token(TOKEN_SINH);
+        }
+
+        if (peek(4) == "cosh") {
+            advance(4);
+            return make_token(TOKEN_COSH);
+        }
+
+        if (peek(4) == "tanh") {
+            advance(4);
+            return make_token(TOKEN_TANH);
+        }
+
+        if (peek(4) == "asin") {
+            advance(4);
+            return make_token(TOKEN_ASIN);
+        }
+
+        if (peek(4) == "acos") {
+            advance(4);
+            return make_token(TOKEN_ACOS);
+        }
+
+        if (peek(4) == "atan") {
+            advance(4);
+            return make_token(TOKEN_ATAN);
+        }
+
+        if (peek(4) == "sqrt") {
+            advance(4);
+            return make_token(TOKEN_SQRT);
+        }
+
+        if (peek(3) == "exp") {
+            advance(3);
+            return make_token(TOKEN_EXP);
+        }
+
+        if (peek(3) == "log") {
+            advance(3);
+            return make_token(TOKEN_LOG);
+        }
+
+        if (peek(3) == "sin") {
+            advance(3);
+            return make_token(TOKEN_SIN);
+        }
+
+        if (peek(3) == "cos") {
+            advance(3);
+            return make_token(TOKEN_COS);
+        }
+
+        if (peek(3) == "tan") {
+            advance(3);
+            return make_token(TOKEN_TAN);
+        }
+
+        if (peek(2) == "ln") {
+            advance(2);
+            return make_token(TOKEN_LN);
+        }
+
+        return make_token(TOKEN_NOMATCH);
+
     }
 
-    char SimpleScalarScanner::peek() {
-        return *current;
+    Token SimpleScalarScanner::scan_number() {
+
+        typedef enum {
+            START_INTEGER_PART,
+            INTEGER_MINUS_PART,
+            INTEGER_PART,
+            START_FRACTION_PART,
+            FRACTION_PART,
+            START_EXPONENT_PART,
+            EXPONENT_MINUS_PART,
+            EXPONENT_INTEGER_PART
+
+        } NumberParseState;
+
+        std::string str_number;
+
+        NumberParseState state = START_INTEGER_PART;
+
+        for (;;) {
+
+            if (state == START_INTEGER_PART && peek() == "-") {
+                str_number += peek();
+                advance();
+                state = INTEGER_MINUS_PART;
+                continue;
+            }
+
+            if (state == START_INTEGER_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                state = INTEGER_PART;
+                continue;
+            }
+
+            if (state == START_INTEGER_PART) {
+                return make_token(TOKEN_NOMATCH);
+            }
+
+            if (state == INTEGER_MINUS_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                state = INTEGER_PART;
+                continue;
+            }
+
+            if (state == INTEGER_MINUS_PART) {
+                retreat();
+                return make_token(TOKEN_NOMATCH);
+            }
+
+            if (state == INTEGER_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                continue;
+            }
+
+            if (state == INTEGER_PART && (peek() == ".")) {
+               str_number += peek();
+               advance();
+               state = START_FRACTION_PART;
+               continue;
+            }
+
+            if (state == INTEGER_PART) {
+                return make_token(TOKEN_NUMBER);
+            }
+
+            if (state == START_FRACTION_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                state = FRACTION_PART;
+                continue;
+            }
+
+            if (state == START_FRACTION_PART) {
+                return make_error_token("Unknown character.");
+            }
+
+            if (state == FRACTION_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                continue;
+            }
+
+            if (state == FRACTION_PART && (peek() == "e" || peek() == "E")) {
+                str_number += peek();
+                advance();
+                state = START_EXPONENT_PART;
+                continue;
+            }
+
+            if (state == FRACTION_PART) {
+                return make_token(TOKEN_NUMBER);
+            }
+
+            if (state == START_EXPONENT_PART && peek() == "-") {
+                str_number += peek();
+                advance();
+                state = EXPONENT_MINUS_PART;
+                continue;
+            }
+
+            if (state == START_EXPONENT_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                state = EXPONENT_INTEGER_PART;
+                continue;
+            }
+
+            if (state == START_EXPONENT_PART) {
+                return make_error_token("Unknown character.");
+            }
+
+            if (state == EXPONENT_MINUS_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                state = EXPONENT_INTEGER_PART;
+                continue;
+            }
+
+            if (state == EXPONENT_MINUS_PART) {
+                return make_error_token("Unknown character.");
+            }
+
+            if (state == EXPONENT_INTEGER_PART && peek_digit()) {
+                str_number += peek();
+                advance();
+                continue;
+            }
+
+            return make_token(TOKEN_NUMBER);
+
+        }
+
     }
 
-    char SimpleScalarScanner::peek_next() {
-        if (is_at_end()) return '\0';
-        return current[1];
+    void SimpleScalarScanner::advance(size_t length) {
+
+        // Increment current by 1.
+        current += length;
+
+    }
+
+    void SimpleScalarScanner::retreat(size_t length) {
+
+        // Decrement current by 1.
+        current -= length;
+
+    }
+
+    std::string SimpleScalarScanner::peek(size_t length) {
+
+        // Look at the current character, but do not advance.
+        return source.substr(current, length);
+
+    }
+
+    bool SimpleScalarScanner::peek_digit() {
+
+        // Check if the current character is a digit.
+        if (peek() == "0") return true;
+        if (peek() == "1") return true;
+        if (peek() == "2") return true;
+        if (peek() == "3") return true;
+        if (peek() == "4") return true;
+        if (peek() == "5") return true;
+        if (peek() == "6") return true;
+        if (peek() == "7") return true;
+        if (peek() == "8") return true;
+        if (peek() == "9") return true;
+        return false;
+
     }
 
     bool SimpleScalarScanner::is_at_end() {
-        return *current == '\0';
-    }
 
-    bool SimpleScalarScanner::is_alpha(char c) {
-        return (c >= 'a' && c <= 'z') ||
-               (c >= 'A' && c <= 'Z');
-    }
+        // Check if the current character is at the end.
+        return source[current] == '\0';
 
-    bool SimpleScalarScanner::is_digit(char c) {
-        return c >= '0' && c <= '9';
     }
 
     Token SimpleScalarScanner::make_token(TokenType type) {
-        return {type, start, (size_t)(current - start), line};
+
+        return {type, source.substr(start, current - start), ""};
+
     }
 
     Token SimpleScalarScanner::make_error_token(const char *message) {
-        return {TOKEN_ERROR, message, (size_t)strlen(message), line};
+
+        return {TOKEN_ERROR, source.substr(start, current - start), message};
+
     }
 
 } // namespace ming.

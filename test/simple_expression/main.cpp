@@ -5,17 +5,28 @@
 #define CATCH_CONFIG_MAIN
 #include <catch/catch.hpp>
 
-#include "simple_expression.hpp"
+#include <sstream>
+
+#include "simple_expression_driver.hpp"
 
 const double eps = 1E-18;
 
 TEST_CASE("Test in_bottom_left()") {
 
-    SimpleExpression se;
+    using std::vector;
+    using std::stringstream;
 
-    SimpleScalarCalculator calculator = se.parse("23.3*sin(x*(y+z))");
+    using mimg::SimpleExpressionDriver;
 
-    std::cout << "23.3*sin(2*(3+4)) = " << calculator(2,3,4) << std::endl;
-    std::cout << "23.3*sin(4*(2+3)) = " << calculator(4,2,3) << std::endl;
+    SimpleExpressionDriver driver;
+
+
+    stringstream ss;
+    ss << "This is one\nAnd this is two.";
+
+    driver.parse(ss);
+
+    std::cout << driver << std::endl;
 
 }
+

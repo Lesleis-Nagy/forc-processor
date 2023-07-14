@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
     args::Positional<std::string> input_file(parser, "input", "the input MERRILL file.");
     args::Positional<std::string> output_file(parser, "output", "the output MERRILL file.");
+
     try {
         parser.ParseCLI(argc, argv);
     }
