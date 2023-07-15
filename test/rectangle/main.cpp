@@ -8,6 +8,8 @@
 
 #include "rectangle.hpp"
 
+using namespace mimg;
+
 const double eps = 1E-18;
 
 TEST_CASE("Test in_bottom_left()") {

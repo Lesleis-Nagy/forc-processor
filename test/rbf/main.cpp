@@ -8,6 +8,8 @@
 
 #include "rbf.hpp"
 
+using namespace mimg;
+
 const double eps = 1e-10;
 
 TEST_CASE("Gaussian RBF, epsilon=0.1") {

@@ -9,6 +9,8 @@
 #include "point_populator.hpp"
 #include "rbf_dscal_interp.hpp"
 
+using namespace mimg;
+
 const double eps = 1e-10;
 
 TEST_CASE("Gaussian interpolation, epsilon=2.0") {

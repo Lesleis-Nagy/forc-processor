@@ -2,7 +2,8 @@
 // Created by L. Nagy on 06/07/2023.
 //
 
-#ifndef MIMG_SPARSEBUMPINTERPOLATION_HPP
-#define MIMG_SPARSEBUMPINTERPOLATION_HPP
+#pragma once
 
-#endif //MIMG_SPARSEBUMPINTERPOLATION_HPP
+namespace mimg {
+
+} // namespace mimg

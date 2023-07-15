@@ -8,6 +8,7 @@
 
 #include "fraction.hpp"
 
+using namespace mimg;
 
 TEST_CASE("Test with double - 1") {
 

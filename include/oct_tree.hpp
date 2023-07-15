@@ -4,3 +4,6 @@
 
 #pragma once
 
+namespace mimg {
+
+} // namespace mimg

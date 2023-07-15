@@ -8,6 +8,8 @@
 
 #include "cuboid.hpp"
 
+using namespace mimg;
+
 TEST_CASE("Test in_bottom_back_left()") {
 
     Cuboid cuboid({0, 0, 0}, 2, 2, 2);
