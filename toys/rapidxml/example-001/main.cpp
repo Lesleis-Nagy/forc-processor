@@ -2,12 +2,12 @@
 // Created by L. Nagy on 15/07/2023.
 //
 
-#include <string.h>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "rapidxml.hpp"
+
+#include "rapidxml_ext.hpp"
 
 using namespace rapidxml;
 using namespace std;
