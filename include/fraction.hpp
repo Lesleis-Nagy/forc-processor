@@ -118,7 +118,6 @@ private:
         return n1;
     }
 
-
     void set(double v, size_t max_precision) {
 
         // The sign of the number.
@@ -188,7 +187,6 @@ private:
 
         }
     }
-
 
     long long _n;
     long long _d;

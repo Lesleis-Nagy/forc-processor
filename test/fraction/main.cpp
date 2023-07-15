@@ -9,18 +9,56 @@
 #include "fraction.hpp"
 
 
-TEST_CASE("Test normal operation", "part 1") {
+TEST_CASE("Test with double - 1") {
 
     Fraction fpp(100.123);
-    Fraction fpn(-100.123);
-    Fraction fpp2(100.123456789);
 
-    Fraction fp3 = fpp + fpn;
-
-    std::cout << fpp << std::endl;
-    std::cout << fpn << std::endl;
-    std::cout << fpp2 << std::endl;
-    std::cout << fp3 << std::endl;
+    CHECK(fpp.numerator() == 100123);
+    CHECK(fpp.denominator() == 1000);
 
 }
 
+TEST_CASE("Test with double - 2") {
+
+    Fraction fpp(100e-3);
+
+    CHECK(fpp.numerator() == 1);
+    CHECK(fpp.denominator() == 10);
+
+}
+
+TEST_CASE("Test with double - 3") {
+
+    Fraction fpp(1.123456e-3);
+
+    CHECK(fpp.numerator() == 11);
+    CHECK(fpp.denominator() == 10000);
+
+}
+
+TEST_CASE("Test with string - 1") {
+
+    Fraction fpp("100.123");
+
+    CHECK(fpp.numerator() == 100123);
+    CHECK(fpp.denominator() == 1000);
+
+}
+
+TEST_CASE("Test with string - 2") {
+
+    Fraction fpp("100e-3");
+
+    CHECK(fpp.numerator() == 1);
+    CHECK(fpp.denominator() == 10);
+
+}
+
+TEST_CASE("Test with string - 3") {
+
+    Fraction fpp("1.123456e-3");
+
+    CHECK(fpp.numerator() == 11);
+    CHECK(fpp.denominator() == 10000);
+
+}
