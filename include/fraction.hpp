@@ -166,7 +166,7 @@ namespace mimg {
 
             if (numerator == 0) {
 
-                _n = 0;
+                _n = int_part;
                 _d = 1;
 
             } else {
@@ -196,44 +196,46 @@ namespace mimg {
 
     typedef std::pair<Fraction, Fraction> FractionPair;
 
-    template<>
-    struct std::hash<Fraction> {
-        std::size_t operator()(Fraction const &v) const noexcept {
-            std::size_t n = std::hash<long long>{}(v.numerator());
-            std::size_t d = std::hash<long long>{}(v.denominator());
 
-            size_t seed = 0;
-
-            hash_combine(seed, n);
-            hash_combine(seed, d);
-
-            return seed;
-        }
-    };
-
-    template<>
-    struct std::hash<FractionPair> {
-        std::size_t operator()(FractionPair const &v) const noexcept {
-            std::size_t n = std::hash<Fraction>{}(v.first);
-            std::size_t d = std::hash<Fraction>{}(v.second);
-
-            size_t seed = 0;
-
-            hash_combine(seed, n);
-            hash_combine(seed, d);
-
-            return seed;
-        }
-    };
-
-    std::ostream &operator<<(std::ostream &out, const Fraction &fp) {
-        out << fp.numerator() << "/" << fp.denominator();
-        return out;
-    }
-
-    std::ostream &operator<<(std::ostream &out, const FractionPair &fp) {
-        out << "(" << fp.first << ", " << fp.second << ")";
-        return out;
-    }
 
 } // namespace mimg
+
+template<>
+struct std::hash<mimg::Fraction> {
+    std::size_t operator()(mimg::Fraction const &v) const noexcept {
+        std::size_t n = std::hash<long long>{}(v.numerator());
+        std::size_t d = std::hash<long long>{}(v.denominator());
+
+        size_t seed = 0;
+
+        mimg::hash_combine(seed, n);
+        mimg::hash_combine(seed, d);
+
+        return seed;
+    }
+};
+
+template<>
+struct std::hash<mimg::FractionPair> {
+    std::size_t operator()(mimg::FractionPair const &v) const noexcept {
+        std::size_t n = std::hash<mimg::Fraction>{}(v.first);
+        std::size_t d = std::hash<mimg::Fraction>{}(v.second);
+
+        size_t seed = 0;
+
+        mimg::hash_combine(seed, n);
+        mimg::hash_combine(seed, d);
+
+        return seed;
+    }
+};
+
+std::ostream &operator<<(std::ostream &out, const mimg::Fraction &fp) {
+    out << fp.numerator() << "/" << fp.denominator();
+    return out;
+}
+
+std::ostream &operator<<(std::ostream &out, const mimg::FractionPair &fp) {
+    out << "(" << fp.first << ", " << fp.second << ")";
+    return out;
+}

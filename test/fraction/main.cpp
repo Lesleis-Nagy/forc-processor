@@ -37,6 +37,15 @@ TEST_CASE("Test with double - 3") {
 
 }
 
+TEST_CASE("Test with double - 4") {
+
+    Fraction fpp(200.0000);
+
+    CHECK(fpp.numerator() == 200);
+    CHECK(fpp.denominator() == 1);
+
+}
+
 TEST_CASE("Test with string - 1") {
 
     Fraction fpp("100.123");
@@ -61,5 +70,17 @@ TEST_CASE("Test with string - 3") {
 
     CHECK(fpp.numerator() == 11);
     CHECK(fpp.denominator() == 10000);
+
+}
+
+TEST_CASE("Test with string - 4") {
+
+    Fraction fpp("200.0000");
+
+//    std::cout << fpp.numerator() << std::endl;
+//    std::cout << fpp.denominator() << std::endl;
+
+    CHECK(fpp.numerator() == 200);
+    CHECK(fpp.denominator() == 1);
 
 }
