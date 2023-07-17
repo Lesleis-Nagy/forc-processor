@@ -54,77 +54,77 @@ namespace mimg {
 
         class XCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const  throw() {
                 return "Incorrect number of vertex x-components.";
             }
         };
 
         class YCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of vertex y-components.";
             }
         };
 
         class ZCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of vertex z-components.";
             }
         };
 
         class TetraIdxCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of tetrahedral indices.";
             }
         };
 
         class TetraSubmeshIdxCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of tetrahedral submesh indices";
             }
         };
 
         class MxZoneCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of magnetization x-component zones.";
             }
         };
 
         class MyZoneCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of magnetization y-component zones.";
             }
         };
 
         class MzZoneCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of magnetization z-component zones.";
             }
         };
 
         class MxComponentCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of magnetization x-components.";
             }
         };
 
         class MyComponentCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of magnetization y-components.";
             }
         };
 
         class MzComponentCountException : public std::exception {
         public:
-            [[nodiscard]] const char * what() const override {
+            [[nodiscard]] const char * what() const throw() {
                 return "Incorrect number of magnetization z-components.";
             }
         };
