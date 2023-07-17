@@ -27,4 +27,3 @@ clean:
 	rm -rf simple_expression.tab.hh
 	rm -rf simple_expression.yy.cc
 	rm -rf stack.hh
-
