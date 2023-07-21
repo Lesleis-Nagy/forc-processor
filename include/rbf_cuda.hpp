@@ -10,7 +10,7 @@
 #include <cuda.h>
 
 __global__
-void saxpy(float a, float *x, float *y);
+void saxpy(float a, const float *x, float *y);
 
 void cuda_saxpy(float a,
                 const std::vector<float> &in_x,
