@@ -1,6 +1,7 @@
 add_subdirectory(cuboid)
 add_subdirectory(fraction)
 add_subdirectory(rbf)
+add_subdirectory(rbf_cuda)
 add_subdirectory(rbf_dscal_interp)
 add_subdirectory(rectangle)
 add_subdirectory(simple_expression)
