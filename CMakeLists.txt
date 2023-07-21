@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(mimg)
+project(mimg LANGUAGES CXX CUDA)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -25,6 +25,9 @@ set(MIMG_RAPIDXML_INCLUDE_DIR "${MIMG_THIRD_PARTY_DIR}/rapidxml-v1.13")
 
 #find_package(VTK REQUIRED)
 find_package(HDF5 COMPONENTS CXX HL REQUIRED)
+find_package(CUDA 12 REQUIRED)
+
+# Descend
 
 # Descend in to the src-lib subdirectory.
 add_subdirectory(${MIMG_SRC_LIB_DIR})
