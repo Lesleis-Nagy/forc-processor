@@ -9,10 +9,12 @@
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
-__global__
-void saxpy(float a, const float *x, float *y);
+typedef float Real;
 
-void cuda_saxpy(float a,
-                const std::vector<float> &in_x,
-                const std::vector<float> &in_y,
-                std::vector<float> &out);
+__global__
+void saxpy(Real a, const Real *x, Real *y);
+
+void cuda_saxpy(Real a,
+                const std::vector<Real> &in_x,
+                const std::vector<Real> &in_y,
+                std::vector<Real> &out);
