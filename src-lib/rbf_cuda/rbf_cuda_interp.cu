@@ -2,7 +2,7 @@
 // Created by L. Nagy on 21/07/2023.
 //
 
-#include "rbf_cuda.hpp"
+#include "rbf_cuda_interp.hpp"
 
 __global__
 void saxpy(float a, const float *x, float *y) {

@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "rbf_cuda.hpp"
+#include "rbf_cuda_interp.hpp"
 
 TEST_CASE("RBF CUDA") {
 
