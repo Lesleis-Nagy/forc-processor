@@ -7,7 +7,7 @@
 #include <catch/catch.hpp>
 
 #include "point_populator.hpp"
-#include "rbf_dscal_interp.hpp"
+#include "rbf_cpu_interp.hpp"
 
 using namespace mimg;
 

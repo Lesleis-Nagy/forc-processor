@@ -3,7 +3,7 @@
 //
 
 #include "point_populator.hpp"
-#include "rbf_dscal_interp.hpp"
+#include "rbf_cpu_interp.hpp"
 
 #define M_PI 3.14159265358979323846
 
