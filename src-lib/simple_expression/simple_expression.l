@@ -29,37 +29,76 @@ using token = mimg::SimpleExpressionParser::token;
 
 %%
 %{          /** Code executed at the beginning of yylex **/
-            yylval = lval;
+    yylval = lval;
 %}
 
-[a-z]       {
-               return( token::LOWER );
-            }
+"<"                                             {
+                                                    return(token::OANGLE);
+                                                }
 
-[A-Z]       {
-               return( token::UPPER );
-            }
+">"                                             {
+                                                    return(token::CANGLE);
+                                                }
 
-[a-zA-Z]+   {
-               /**
-                * Section 10.1.5.1 of the 3.0.2 Bison Manual says the
-                * following should work:
-                * yylval.build( yytext );
-                * but it doesn't.
-                * ref: http://goo.gl/KLn0w2
-                */
-               yylval->build< std::string >( yytext );
-               return( token::WORD );
-            }
+","                                             {
+                                                    return(token::COMMA);
+                                                }
 
-\n          {
-               // Update line number
-               loc->lines();
-               return( token::NEWLINE );
-            }
+"("                                             {
+                                                    return(token::OPAREN);
+                                                }
 
-.           {
-               return( token::CHAR );
-            }
+")"                                             {
+                                                    return(token::CPAREN);
+                                                }
+
+"x"                                             {
+                                                    return(token::XVAR);
+                                                }
+
+"y"                                             {
+                                                    return(token::YVAR);
+                                                }
+
+"z"                                             {
+                                                    return(token::ZVAR);
+                                                }
+
+"+"                                             {
+                                                    return(token::PLUS);
+                                                }
+
+"-"                                             {
+                                                    return(token::MINUS);
+                                                }
+
+"*"                                             {
+                                                    return(token::MULTIPLY);
+                                                }
+
+"/"                                             {
+                                                    return(token::DIVIDE);
+                                                }
+
+[0-9]*([0-9]\.?|\.[0-9])[0-9]*([Ee][-+]?[0-9]+) {
+                                                    yylval->build<double>(atof(yytext));
+                                                    return(token::FLOAT);
+                                                }
+
+"sin"                                           {
+                                                    return(token::SIN);
+                                                }
+
+"cos"                                           {
+                                                    return(token::COS);
+                                                }
+
+"tan"                                           {
+                                                    return(token::TAN);
+                                                }
+
+[ \n\t]                                         {;}
+
+.                                               {;}
+
 %%
-

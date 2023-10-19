@@ -6,6 +6,111 @@
 
 namespace mimg {
 
+    double evaluate_expression_stack(const std::vector<Token> &stack, double x, double y, double z) {
+
+        std::vector<double> result;
+
+        for (const auto &token : stack) {
+            switch (token.type) {
+                case TK_CONSTANT:
+                    result.push_back(token.value);
+                    break;
+                case TK_X:
+                    result.push_back(x);
+                    break;
+                case TK_Y:
+                    result.push_back(y);
+                    break;
+                case TK_Z:
+                    result.push_back(z);
+                    break;
+                case TK_PLUS:
+                    if (result.size() < 2) {
+                        throw EvaluateExpressionStackBinaryOperatorArityException();
+                    } else {
+                        double v1 = result.back();
+                        result.pop_back();
+                        double v2 = result.back();
+                        result.pop_back();
+                        result.push_back(v1 + v2);
+                    }
+                    break;
+                case TK_MINUS:
+                    if (result.size() < 2) {
+                        throw EvaluateExpressionStackBinaryOperatorArityException();
+                    } else {
+                        double v1 = result.back();
+                        result.pop_back();
+                        double v2 = result.back();
+                        result.pop_back();
+                        result.push_back(v2 - v1);
+                    }
+                    break;
+                case TK_MULTIPLY:
+                    if (result.size() < 2) {
+                        throw EvaluateExpressionStackBinaryOperatorArityException();
+                    } else {
+                        double v1 = result.back();
+                        result.pop_back();
+                        double v2 = result.back();
+                        result.pop_back();
+                        result.push_back(v1 * v2);
+                    }
+                    break;
+                case TK_DIVIDE:
+                    if (result.size() < 2) {
+                        throw EvaluateExpressionStackBinaryOperatorArityException();
+                    } else {
+                        double v1 = result.back();
+                        result.pop_back();
+                        double v2 = result.back();
+                        result.pop_back();
+                        result.push_back(v1 / v2);
+                    }
+                    break;
+                case TK_SIN:
+                    if (result.empty()) {
+                        throw EvaluateExpressionStackUnaryOperatorArityException();
+                    } else {
+                        double v = result.back();
+                        result.pop_back();
+                        result.push_back(sin(v));
+                    }
+                    break;
+                case TK_COS:
+                    if (result.empty()) {
+                        throw EvaluateExpressionStackUnaryOperatorArityException();
+                    } else {
+                        double v = result.back();
+                        result.pop_back();
+                        result.push_back(cos(v));
+                    }
+                    break;
+                case TK_TAN:
+                    if (result.empty()) {
+                        throw EvaluateExpressionStackUnaryOperatorArityException();
+                    } else {
+                        double v = result.back();
+                        result.pop_back();
+                        result.push_back(tan(v));
+                    }
+                    break;
+                default:
+                    throw EvaluateExpressionStackUnknownOperationException();
+            }
+        }
+
+        if (result.size() != 1) {
+            throw EvaluateExpressionStackFinalSingleValueException();
+        }
+
+        return result[0];
+    }
+
+    //////////////////////////////
+    // SimpleExpressionDriver member func impl.
+    //////////////////////////////
+
     SimpleExpressionDriver::~SimpleExpressionDriver() {
         delete (scanner);
         scanner = nullptr;
@@ -13,7 +118,7 @@ namespace mimg {
         parser = nullptr;
     }
 
-    void SimpleExpressionDriver::parse(const char *const file_name) {
+    SimpleCalculator SimpleExpressionDriver::parse(const char *const file_name) {
 
         using std::ifstream;
 
@@ -24,18 +129,21 @@ namespace mimg {
         }
 
         parse_helper(fin);
-        return;
+
+        return calculator;
 
     }
 
-    void SimpleExpressionDriver::parse(std::istream &stream) {
+    SimpleCalculator SimpleExpressionDriver::parse(std::istream &stream) {
 
         if (!stream.good() && stream.eof()) {
-            return;
+            throw SimpleExpressionDriverInputFileException("");
         }
 
         parse_helper(stream);
-        return;
+
+        return calculator;
+
     }
 
     void SimpleExpressionDriver::parse_helper(std::istream &stream) {
@@ -61,50 +169,63 @@ namespace mimg {
 
     }
 
-    void SimpleExpressionDriver::add_upper() {
-        upper_case++;
-        chars++;
-        words++;
+    void SimpleExpressionDriver::push_oparen() {
+        // std::cout << "OPAREN" << "\n";
     }
 
-    void SimpleExpressionDriver::add_lower() {
-        lower_case++;
-        chars++;
-        words++;
+    void SimpleExpressionDriver::push_cparen() {
+        // std::cout << "CPAREN" << "\n";
     }
 
-    void SimpleExpressionDriver::add_word(const std::string &word) {
-        words++;
-        chars += word.length();
-        for (const char &c: word) {
-            if (islower(c)) {
-                lower_case++;
-            } else if (isupper(c)) {
-                upper_case++;
-            }
-        }
+    void SimpleExpressionDriver::push_xvar() {
+        stack.push_back({TK_X, 0.0});
     }
 
-    void SimpleExpressionDriver::add_newline() {
-        lines++;
-        chars++;
+    void SimpleExpressionDriver::push_yvar() {
+        stack.push_back({TK_Y, 0.0});
     }
 
-    void SimpleExpressionDriver::add_char() {
-        chars++;
+    void SimpleExpressionDriver::push_zvar() {
+        stack.push_back({TK_Z, 0.0});
     }
 
-    std::ostream &operator<<(std::ostream &out, const SimpleExpressionDriver &driver) {
+    void SimpleExpressionDriver::push_plus() {
+        stack.push_back({TK_PLUS, 0.0});
+    }
 
-        out << driver.get_red() << "Results: " << driver.get_norm() << "\n";
-        out << driver.get_blue() << "Uppercase: " << driver.get_norm() << driver.get_upper_case() << "\n";
-        out << driver.get_blue() << "Lowercase: " << driver.get_norm() << driver.get_lower_case() << "\n";
-        out << driver.get_blue() << "Lines: " << driver.get_norm() << driver.get_lines() << "\n";
-        out << driver.get_blue() << "Words: " << driver.get_norm() << driver.get_words() << "\n";
-        out << driver.get_blue() << "Characters: " << driver.get_norm() << driver.get_chars() << "\n";
+    void SimpleExpressionDriver::push_minus() {
+        stack.push_back({TK_MINUS, 0.0});
+    }
 
-        return (out);
+    void SimpleExpressionDriver::push_multiply() {
+        stack.push_back({TK_MULTIPLY, 0.0});
+    }
 
+    void SimpleExpressionDriver::push_divide() {
+        stack.push_back({TK_DIVIDE, 0.0});
+    }
+
+    void SimpleExpressionDriver::push_float(double value) {
+        stack.push_back({TK_CONSTANT, value});
+    }
+
+    void SimpleExpressionDriver::push_sin() {
+        stack.push_back({TK_SIN, 0.0});
+    }
+
+    void SimpleExpressionDriver::push_cos() {
+        stack.push_back({TK_COS, 0.0});
+    }
+
+    void SimpleExpressionDriver::push_tan() {
+        stack.push_back({TK_TAN, 0.0});
+    }
+
+    void SimpleExpressionDriver::push_expression() {
+        std::vector<Token> new_stack;
+        std::copy(stack.begin(), stack.end(), std::back_inserter(new_stack));
+        calculator._expressions.push_back(std::move(new_stack));
+        stack.clear();
     }
 
 } // namespace mimg

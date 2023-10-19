@@ -53,7 +53,7 @@
 #  endif
 # endif
 
-#line 5 "simple_expression.yy"
+#line 6 "simple_expression.yy"
 namespace mimg {
 #line 59 "location.hh"
 
@@ -299,7 +299,7 @@ namespace mimg {
     return ostr;
   }
 
-#line 5 "simple_expression.yy"
+#line 6 "simple_expression.yy"
 } // mimg
 #line 305 "location.hh"
 

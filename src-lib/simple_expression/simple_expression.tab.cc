@@ -42,7 +42,7 @@
 
 
 // Unqualified %code blocks.
-#line 34 "simple_expression.yy"
+#line 35 "simple_expression.yy"
 
    #include <iostream>
    #include <cstdlib>
@@ -145,7 +145,7 @@
 #define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-#line 5 "simple_expression.yy"
+#line 6 "simple_expression.yy"
 namespace mimg {
 #line 151 "simple_expression.tab.cc"
 
@@ -180,8 +180,8 @@ namespace mimg {
   {
     switch (this->kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.copy< std::string > (YY_MOVE (that.value));
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.copy< double > (YY_MOVE (that.value));
         break;
 
       default:
@@ -215,8 +215,8 @@ namespace mimg {
     super_type::move (s);
     switch (this->kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.move< std::string > (YY_MOVE (s.value));
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.move< double > (YY_MOVE (s.value));
         break;
 
       default:
@@ -320,8 +320,8 @@ namespace mimg {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.YY_MOVE_OR_COPY< double > (YY_MOVE (that.value));
         break;
 
       default:
@@ -339,8 +339,8 @@ namespace mimg {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.move< std::string > (YY_MOVE (that.value));
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.move< double > (YY_MOVE (that.value));
         break;
 
       default:
@@ -358,8 +358,8 @@ namespace mimg {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.copy< std::string > (that.value);
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.copy< double > (that.value);
         break;
 
       default:
@@ -376,8 +376,8 @@ namespace mimg {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.move< std::string > (that.value);
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.move< double > (that.value);
         break;
 
       default:
@@ -638,8 +638,8 @@ namespace mimg {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case symbol_kind::S_WORD: // WORD
-        yylhs.value.emplace< std::string > ();
+      case symbol_kind::S_FLOAT: // FLOAT
+        yylhs.value.emplace< double > ();
         break;
 
       default:
@@ -662,38 +662,98 @@ namespace mimg {
         {
           switch (yyn)
             {
-  case 6: // item: UPPER
-#line 68 "simple_expression.yy"
-            { driver.add_upper(); }
+  case 2: // $@1: %empty
+#line 73 "simple_expression.yy"
+                        { driver.push_expression(); }
 #line 669 "simple_expression.tab.cc"
     break;
 
-  case 7: // item: LOWER
-#line 69 "simple_expression.yy"
-            { driver.add_lower(); }
+  case 7: // $@2: %empty
+#line 83 "simple_expression.yy"
+                        { driver.push_expression(); }
 #line 675 "simple_expression.tab.cc"
     break;
 
-  case 8: // item: WORD
-#line 70 "simple_expression.yy"
-            { driver.add_word( yystack_[0].value.as < std::string > () ); }
+  case 8: // two_field: scalar_expression $@2 COMMA scalar_expression
+#line 85 "simple_expression.yy"
+                        { driver.push_expression(); }
 #line 681 "simple_expression.tab.cc"
     break;
 
-  case 9: // item: NEWLINE
-#line 71 "simple_expression.yy"
-            { driver.add_newline(); }
+  case 9: // three_field: two_field COMMA scalar_expression
+#line 91 "simple_expression.yy"
+                        { driver.push_expression(); }
 #line 687 "simple_expression.tab.cc"
     break;
 
-  case 10: // item: CHAR
-#line 72 "simple_expression.yy"
-            { driver.add_char(); }
+  case 10: // scalar_expression: SIN OPAREN scalar_expression CPAREN
+#line 95 "simple_expression.yy"
+                                          { driver.push_sin(); }
 #line 693 "simple_expression.tab.cc"
     break;
 
+  case 11: // scalar_expression: COS OPAREN scalar_expression CPAREN
+#line 96 "simple_expression.yy"
+                                          { driver.push_cos(); }
+#line 699 "simple_expression.tab.cc"
+    break;
 
-#line 697 "simple_expression.tab.cc"
+  case 12: // scalar_expression: TAN OPAREN scalar_expression CPAREN
+#line 97 "simple_expression.yy"
+                                          { driver.push_tan(); }
+#line 705 "simple_expression.tab.cc"
+    break;
+
+  case 13: // scalar_expression: scalar_expression MULTIPLY scalar_expression
+#line 98 "simple_expression.yy"
+                                                   { driver.push_multiply(); }
+#line 711 "simple_expression.tab.cc"
+    break;
+
+  case 14: // scalar_expression: scalar_expression DIVIDE scalar_expression
+#line 99 "simple_expression.yy"
+                                                 { driver.push_divide(); }
+#line 717 "simple_expression.tab.cc"
+    break;
+
+  case 15: // scalar_expression: scalar_expression PLUS scalar_expression
+#line 100 "simple_expression.yy"
+                                               { driver.push_plus(); }
+#line 723 "simple_expression.tab.cc"
+    break;
+
+  case 16: // scalar_expression: scalar_expression MINUS scalar_expression
+#line 101 "simple_expression.yy"
+                                                { driver.push_minus(); }
+#line 729 "simple_expression.tab.cc"
+    break;
+
+  case 19: // scalar_expression: FLOAT
+#line 104 "simple_expression.yy"
+            { driver.push_float(yystack_[0].value.as < double > ()); }
+#line 735 "simple_expression.tab.cc"
+    break;
+
+  case 20: // variable: XVAR
+#line 109 "simple_expression.yy"
+           { driver.push_xvar(); }
+#line 741 "simple_expression.tab.cc"
+    break;
+
+  case 21: // variable: YVAR
+#line 110 "simple_expression.yy"
+           { driver.push_yvar(); }
+#line 747 "simple_expression.tab.cc"
+    break;
+
+  case 22: // variable: ZVAR
+#line 111 "simple_expression.yy"
+           { driver.push_zvar(); }
+#line 753 "simple_expression.tab.cc"
+    break;
+
+
+#line 757 "simple_expression.tab.cc"
 
             default:
               break;
@@ -886,69 +946,94 @@ namespace mimg {
 
 
 
-  const signed char SimpleExpressionParser::yypact_ninf_ = -7;
+  const signed char SimpleExpressionParser::yypact_ninf_ = -5;
 
   const signed char SimpleExpressionParser::yytable_ninf_ = -1;
 
   const signed char
   SimpleExpressionParser::yypact_[] =
   {
-       0,    -7,    -7,    -7,    -7,    -7,    -7,     1,     8,    -7,
-      -7,    -7,    -7
+      26,    -4,    -4,    -5,    -5,    -5,    -5,    -3,     1,     2,
+       9,    66,    -5,     6,    10,    -5,    66,    38,    -4,    -4,
+      -4,    -5,    -4,    -4,    -4,    -4,    16,    20,    -4,    21,
+      -5,    46,    54,    62,    66,    66,    66,    66,    -5,    -5,
+      66,    -4,    -5,    -5,    -5,    66
   };
 
   const signed char
   SimpleExpressionParser::yydefact_[] =
   {
-       0,     2,     6,     7,     8,     9,    10,     0,     0,     4,
-       1,     3,     5
+       0,     0,     0,    20,    21,    22,    19,     0,     0,     0,
+       0,     2,    18,     0,     6,     5,     7,     0,     0,     0,
+       0,     1,     0,     0,     0,     0,     0,     0,     0,     0,
+      17,     0,     0,     0,    15,    16,    13,    14,     3,     4,
+       9,     0,    10,    11,    12,     8
   };
 
   const signed char
   SimpleExpressionParser::yypgoto_[] =
   {
-      -7,    -7,    -7,    -6
+      -5,    -5,    -5,    -5,    -5,    -5,    -5,    -1,    -5
   };
 
   const signed char
   SimpleExpressionParser::yydefgoto_[] =
   {
-       0,     7,     8,     9
+       0,    10,    26,    13,    14,    29,    15,    11,    12
   };
 
   const signed char
   SimpleExpressionParser::yytable_[] =
   {
-       1,    10,    12,     2,     3,     4,     5,     6,    11,     0,
-       0,     2,     3,     4,     5,     6
+      16,    17,     2,    18,     3,     4,     5,    19,    20,    21,
+      27,     6,     7,     8,     9,    28,    38,    31,    32,    33,
+      39,    34,    35,    36,    37,     0,    41,    40,     0,     1,
+       0,     0,     2,     0,     3,     4,     5,     0,     0,     0,
+      45,     6,     7,     8,     9,    30,     0,     0,     0,    22,
+      23,    24,    25,    42,     0,     0,     0,    22,    23,    24,
+      25,    43,     0,     0,     0,    22,    23,    24,    25,    44,
+       0,     0,     0,    22,    23,    24,    25,    22,    23,    24,
+      25
   };
 
   const signed char
   SimpleExpressionParser::yycheck_[] =
   {
-       0,     0,     8,     3,     4,     5,     6,     7,     0,    -1,
-      -1,     3,     4,     5,     6,     7
+       1,     2,     6,     6,     8,     9,    10,     6,     6,     0,
+       4,    15,    16,    17,    18,     5,     0,    18,    19,    20,
+       0,    22,    23,    24,    25,    -1,     5,    28,    -1,     3,
+      -1,    -1,     6,    -1,     8,     9,    10,    -1,    -1,    -1,
+      41,    15,    16,    17,    18,     7,    -1,    -1,    -1,    11,
+      12,    13,    14,     7,    -1,    -1,    -1,    11,    12,    13,
+      14,     7,    -1,    -1,    -1,    11,    12,    13,    14,     7,
+      -1,    -1,    -1,    11,    12,    13,    14,    11,    12,    13,
+      14
   };
 
   const signed char
   SimpleExpressionParser::yystos_[] =
   {
-       0,     0,     3,     4,     5,     6,     7,     9,    10,    11,
-       0,     0,    11
+       0,     3,     6,     8,     9,    10,    15,    16,    17,    18,
+      20,    26,    27,    22,    23,    25,    26,    26,     6,     6,
+       6,     0,    11,    12,    13,    14,    21,     4,     5,    24,
+       7,    26,    26,    26,    26,    26,    26,    26,     0,     0,
+      26,     5,     7,     7,     7,    26
   };
 
   const signed char
   SimpleExpressionParser::yyr1_[] =
   {
-       0,     8,     9,     9,    10,    10,    11,    11,    11,    11,
-      11
+       0,    19,    21,    20,    20,    22,    22,    24,    23,    25,
+      26,    26,    26,    26,    26,    26,    26,    26,    26,    26,
+      27,    27,    27
   };
 
   const signed char
   SimpleExpressionParser::yyr2_[] =
   {
-       0,     2,     1,     2,     1,     2,     1,     1,     1,     1,
-       1
+       0,     2,     0,     3,     4,     1,     1,     0,     4,     3,
+       4,     4,     4,     3,     3,     3,     3,     3,     1,     1,
+       1,     1,     1
   };
 
 
@@ -958,8 +1043,11 @@ namespace mimg {
   const char*
   const SimpleExpressionParser::yytname_[] =
   {
-  "\"end of file\"", "error", "\"invalid token\"", "UPPER", "LOWER",
-  "WORD", "NEWLINE", "CHAR", "$accept", "list_option", "list", "item", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "OANGLE", "CANGLE",
+  "COMMA", "OPAREN", "CPAREN", "XVAR", "YVAR", "ZVAR", "PLUS", "MINUS",
+  "MULTIPLY", "DIVIDE", "FLOAT", "SIN", "COS", "TAN", "$accept",
+  "expression", "$@1", "vector_field", "two_field", "$@2", "three_field",
+  "scalar_expression", "variable", YY_NULLPTR
   };
 #endif
 
@@ -968,8 +1056,9 @@ namespace mimg {
   const signed char
   SimpleExpressionParser::yyrline_[] =
   {
-       0,    60,    60,    60,    63,    64,    68,    69,    70,    71,
-      72
+       0,    73,    73,    73,    74,    78,    79,    83,    83,    89,
+      95,    96,    97,    98,    99,   100,   101,   102,   103,   104,
+     109,   110,   111
   };
 
   void
@@ -1034,10 +1123,11 @@ namespace mimg {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18
     };
     // Last valid token kind.
-    const int code_max = 262;
+    const int code_max = 273;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -1047,11 +1137,11 @@ namespace mimg {
       return symbol_kind::S_YYUNDEF;
   }
 
-#line 5 "simple_expression.yy"
+#line 6 "simple_expression.yy"
 } // mimg
-#line 1053 "simple_expression.tab.cc"
+#line 1143 "simple_expression.tab.cc"
 
-#line 75 "simple_expression.yy"
+#line 114 "simple_expression.yy"
 
 
 

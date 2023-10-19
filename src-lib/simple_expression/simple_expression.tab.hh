@@ -45,7 +45,7 @@
 #ifndef YY_YY_SIMPLE_EXPRESSION_TAB_HH_INCLUDED
 # define YY_YY_SIMPLE_EXPRESSION_TAB_HH_INCLUDED
 // "%code requires" blocks.
-#line 14 "simple_expression.yy"
+#line 15 "simple_expression.yy"
 
    namespace mimg {
       class SimpleExpressionDriver;
@@ -201,7 +201,7 @@
 # define YYDEBUG 1
 #endif
 
-#line 5 "simple_expression.yy"
+#line 6 "simple_expression.yy"
 namespace mimg {
 #line 207 "simple_expression.tab.hh"
 
@@ -422,8 +422,8 @@ namespace mimg {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // WORD
-      char dummy1[sizeof (std::string)];
+      // FLOAT
+      char dummy1[sizeof (double)];
     };
 
     /// The size of the largest semantic type.
@@ -476,11 +476,22 @@ namespace mimg {
     END = 0,                       // "end of file"
     YYerror = 256,                 // error
     YYUNDEF = 257,                 // "invalid token"
-    UPPER = 258,                   // UPPER
-    LOWER = 259,                   // LOWER
-    WORD = 260,                    // WORD
-    NEWLINE = 261,                 // NEWLINE
-    CHAR = 262                     // CHAR
+    OANGLE = 258,                  // OANGLE
+    CANGLE = 259,                  // CANGLE
+    COMMA = 260,                   // COMMA
+    OPAREN = 261,                  // OPAREN
+    CPAREN = 262,                  // CPAREN
+    XVAR = 263,                    // XVAR
+    YVAR = 264,                    // YVAR
+    ZVAR = 265,                    // ZVAR
+    PLUS = 266,                    // PLUS
+    MINUS = 267,                   // MINUS
+    MULTIPLY = 268,                // MULTIPLY
+    DIVIDE = 269,                  // DIVIDE
+    FLOAT = 270,                   // FLOAT
+    SIN = 271,                     // SIN
+    COS = 272,                     // COS
+    TAN = 273                      // TAN
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -497,20 +508,36 @@ namespace mimg {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 8, ///< Number of tokens.
+        YYNTOKENS = 19, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_UPPER = 3,                             // UPPER
-        S_LOWER = 4,                             // LOWER
-        S_WORD = 5,                              // WORD
-        S_NEWLINE = 6,                           // NEWLINE
-        S_CHAR = 7,                              // CHAR
-        S_YYACCEPT = 8,                          // $accept
-        S_list_option = 9,                       // list_option
-        S_list = 10,                             // list
-        S_item = 11                              // item
+        S_OANGLE = 3,                            // OANGLE
+        S_CANGLE = 4,                            // CANGLE
+        S_COMMA = 5,                             // COMMA
+        S_OPAREN = 6,                            // OPAREN
+        S_CPAREN = 7,                            // CPAREN
+        S_XVAR = 8,                              // XVAR
+        S_YVAR = 9,                              // YVAR
+        S_ZVAR = 10,                             // ZVAR
+        S_PLUS = 11,                             // PLUS
+        S_MINUS = 12,                            // MINUS
+        S_MULTIPLY = 13,                         // MULTIPLY
+        S_DIVIDE = 14,                           // DIVIDE
+        S_FLOAT = 15,                            // FLOAT
+        S_SIN = 16,                              // SIN
+        S_COS = 17,                              // COS
+        S_TAN = 18,                              // TAN
+        S_YYACCEPT = 19,                         // $accept
+        S_expression = 20,                       // expression
+        S_21_1 = 21,                             // $@1
+        S_vector_field = 22,                     // vector_field
+        S_two_field = 23,                        // two_field
+        S_24_2 = 24,                             // $@2
+        S_three_field = 25,                      // three_field
+        S_scalar_expression = 26,                // scalar_expression
+        S_variable = 27                          // variable
       };
     };
 
@@ -547,8 +574,8 @@ namespace mimg {
       {
         switch (this->kind ())
     {
-      case symbol_kind::S_WORD: // WORD
-        value.move< std::string > (std::move (that.value));
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.move< double > (std::move (that.value));
         break;
 
       default:
@@ -575,13 +602,13 @@ namespace mimg {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, std::string&& v, location_type&& l)
+      basic_symbol (typename Base::kind_type t, double&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
         , location (std::move (l))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const std::string& v, const location_type& l)
+      basic_symbol (typename Base::kind_type t, const double& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -612,8 +639,8 @@ namespace mimg {
         // Value type destructor.
 switch (yykind)
     {
-      case symbol_kind::S_WORD: // WORD
-        value.template destroy< std::string > ();
+      case symbol_kind::S_FLOAT: // FLOAT
+        value.template destroy< double > ();
         break;
 
       default:
@@ -717,20 +744,20 @@ switch (yykind)
       {
 #if !defined _MSC_VER || defined __clang__
         YY_ASSERT (tok == token::END
-                   || (token::YYerror <= tok && tok <= token::LOWER)
-                   || (token::NEWLINE <= tok && tok <= token::CHAR));
+                   || (token::YYerror <= tok && tok <= token::DIVIDE)
+                   || (token::SIN <= tok && tok <= token::TAN));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
-      symbol_type (int tok, std::string v, location_type l)
+      symbol_type (int tok, double v, location_type l)
         : super_type (token_kind_type (tok), std::move (v), std::move (l))
 #else
-      symbol_type (int tok, const std::string& v, const location_type& l)
+      symbol_type (int tok, const double& v, const location_type& l)
         : super_type (token_kind_type (tok), v, l)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT (tok == token::WORD);
+        YY_ASSERT (tok == token::FLOAT);
 #endif
       }
     };
@@ -832,76 +859,241 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_UPPER (location_type l)
+      make_OANGLE (location_type l)
       {
-        return symbol_type (token::UPPER, std::move (l));
+        return symbol_type (token::OANGLE, std::move (l));
       }
 #else
       static
       symbol_type
-      make_UPPER (const location_type& l)
+      make_OANGLE (const location_type& l)
       {
-        return symbol_type (token::UPPER, l);
+        return symbol_type (token::OANGLE, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_LOWER (location_type l)
+      make_CANGLE (location_type l)
       {
-        return symbol_type (token::LOWER, std::move (l));
+        return symbol_type (token::CANGLE, std::move (l));
       }
 #else
       static
       symbol_type
-      make_LOWER (const location_type& l)
+      make_CANGLE (const location_type& l)
       {
-        return symbol_type (token::LOWER, l);
+        return symbol_type (token::CANGLE, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_WORD (std::string v, location_type l)
+      make_COMMA (location_type l)
       {
-        return symbol_type (token::WORD, std::move (v), std::move (l));
+        return symbol_type (token::COMMA, std::move (l));
       }
 #else
       static
       symbol_type
-      make_WORD (const std::string& v, const location_type& l)
+      make_COMMA (const location_type& l)
       {
-        return symbol_type (token::WORD, v, l);
+        return symbol_type (token::COMMA, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NEWLINE (location_type l)
+      make_OPAREN (location_type l)
       {
-        return symbol_type (token::NEWLINE, std::move (l));
+        return symbol_type (token::OPAREN, std::move (l));
       }
 #else
       static
       symbol_type
-      make_NEWLINE (const location_type& l)
+      make_OPAREN (const location_type& l)
       {
-        return symbol_type (token::NEWLINE, l);
+        return symbol_type (token::OPAREN, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_CHAR (location_type l)
+      make_CPAREN (location_type l)
       {
-        return symbol_type (token::CHAR, std::move (l));
+        return symbol_type (token::CPAREN, std::move (l));
       }
 #else
       static
       symbol_type
-      make_CHAR (const location_type& l)
+      make_CPAREN (const location_type& l)
       {
-        return symbol_type (token::CHAR, l);
+        return symbol_type (token::CPAREN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_XVAR (location_type l)
+      {
+        return symbol_type (token::XVAR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_XVAR (const location_type& l)
+      {
+        return symbol_type (token::XVAR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_YVAR (location_type l)
+      {
+        return symbol_type (token::YVAR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_YVAR (const location_type& l)
+      {
+        return symbol_type (token::YVAR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ZVAR (location_type l)
+      {
+        return symbol_type (token::ZVAR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ZVAR (const location_type& l)
+      {
+        return symbol_type (token::ZVAR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_PLUS (location_type l)
+      {
+        return symbol_type (token::PLUS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_PLUS (const location_type& l)
+      {
+        return symbol_type (token::PLUS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_MINUS (location_type l)
+      {
+        return symbol_type (token::MINUS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_MINUS (const location_type& l)
+      {
+        return symbol_type (token::MINUS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_MULTIPLY (location_type l)
+      {
+        return symbol_type (token::MULTIPLY, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_MULTIPLY (const location_type& l)
+      {
+        return symbol_type (token::MULTIPLY, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_DIVIDE (location_type l)
+      {
+        return symbol_type (token::DIVIDE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_DIVIDE (const location_type& l)
+      {
+        return symbol_type (token::DIVIDE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_FLOAT (double v, location_type l)
+      {
+        return symbol_type (token::FLOAT, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_FLOAT (const double& v, const location_type& l)
+      {
+        return symbol_type (token::FLOAT, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_SIN (location_type l)
+      {
+        return symbol_type (token::SIN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_SIN (const location_type& l)
+      {
+        return symbol_type (token::SIN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_COS (location_type l)
+      {
+        return symbol_type (token::COS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_COS (const location_type& l)
+      {
+        return symbol_type (token::COS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_TAN (location_type l)
+      {
+        return symbol_type (token::TAN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_TAN (const location_type& l)
+      {
+        return symbol_type (token::TAN, l);
       }
 #endif
 
@@ -1208,9 +1400,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 15,     ///< Last index in yytable_.
-      yynnts_ = 4,  ///< Number of nonterminal symbols.
-      yyfinal_ = 10 ///< Termination state number.
+      yylast_ = 80,     ///< Last index in yytable_.
+      yynnts_ = 9,  ///< Number of nonterminal symbols.
+      yyfinal_ = 21 ///< Termination state number.
     };
 
 
@@ -1221,9 +1413,9 @@ switch (yykind)
   };
 
 
-#line 5 "simple_expression.yy"
+#line 6 "simple_expression.yy"
 } // mimg
-#line 1227 "simple_expression.tab.hh"
+#line 1419 "simple_expression.tab.hh"
 
 
 

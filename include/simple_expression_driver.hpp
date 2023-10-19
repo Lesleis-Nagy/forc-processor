@@ -11,6 +11,9 @@
 #include <istream>
 #include <string>
 #include <sstream>
+#include <utility>
+
+#include "point.hpp"
 
 #include "simple_expression_scanner.hpp"
 #include "simple_expression.tab.hh"
@@ -21,68 +24,147 @@
 
 namespace mimg {
 
-    class SimpleExpressionDriverInputFileException : public std::exception {
+    class EvaluateExpressionStackUnaryOperatorArityException : public std::exception {
     public:
 
-        SimpleExpressionDriverInputFileException() : _file_name("") {}
-
-        SimpleExpressionDriverInputFileException(const std::string &file_name) : _file_name(file_name) {}
+        EvaluateExpressionStackUnaryOperatorArityException() = default;
 
         std::string what() {
-            using std::stringstream;
-
-            stringstream ss;
-            ss << "Could not find file: '" << _file_name << "'.";
-            return ss.str();
-        }
-
-    private:
-
-        std::string _file_name;
-
-    };
-
-    class SimpleExpressionDriverFailedToAllocateScannerException : public std::exception {
-    public:
-
-        SimpleExpressionDriverFailedToAllocateScannerException() = default;
-
-        std::string what() {
-            return "Failed to allocate scanner.";
+            return "When executing a unary operation, no values were on the stack.";
         }
 
     };
 
-    class SimpleExpressionDriverFailedToAllocateParserException : public std::exception {
+    class EvaluateExpressionStackBinaryOperatorArityException : public std::exception {
     public:
 
-        SimpleExpressionDriverFailedToAllocateParserException() = default;
+        EvaluateExpressionStackBinaryOperatorArityException() = default;
 
         std::string what() {
-            return "Failed to allocate parser.";
+            return "When executing a binary operation, fewer than two values were on the stack.";
         }
 
     };
 
-    class SimpleExpressionDriverParseFailedException : public std::exception {
+    class EvaluateExpressionStackUnknownOperationException : public std::exception {
     public:
 
-        SimpleExpressionDriverParseFailedException() = default;
+        EvaluateExpressionStackUnknownOperationException() = default;
 
         std::string what() {
-            return "Failed to allocate parser.";
+            return "Unknown operation on the stack.";
         }
 
     };
+
+    class EvaluateExpressionStackFinalSingleValueException : public std::exception {
+    public:
+
+        EvaluateExpressionStackFinalSingleValueException() = default;
+
+        std::string what() {
+            return "When terminating, the stack doesn't contain a single final value.";
+        }
+
+    };
+
+    enum TokenType {
+        TK_CONSTANT,
+        TK_X, TK_Y, TK_Z,
+        TK_PLUS, TK_MINUS,
+        TK_MULTIPLY, TK_DIVIDE,
+        TK_SIN, TK_COS, TK_TAN
+    };
+
+    struct Token {
+        TokenType type;
+        double value;
+    };
+
+    double evaluate_expression_stack(const std::vector<Token> &stack, double x, double y, double z);
 
 ////////////////
 // SimpleExpressionDriver
 ////////////////
 
+    class SimpleScalarCalculator {
+
+    public:
+
+        SimpleScalarCalculator() = default;
+
+        double operator () (double x) const;
+
+        double operator () (double x, double y) const;
+
+        double operator () (double x, double y, double z) const;
+
+        friend class SimpleExpressionDriver;
+
+    private:
+
+        std::vector<std::vector<Token>> _expressions;
+
+    };
 
     class SimpleExpressionDriver {
 
     public:
+
+        class SimpleExpressionDriverInputFileException : public std::exception {
+        public:
+
+            SimpleExpressionDriverInputFileException() = default;
+
+            explicit SimpleExpressionDriverInputFileException(std::string file_name) : _file_name(std::move(file_name)) {}
+
+            std::string what() {
+                using std::stringstream;
+
+                stringstream ss;
+                ss << "Could not find file: '" << _file_name << "'.";
+                return ss.str();
+            }
+
+        private:
+
+            std::string _file_name;
+
+        };
+
+        class SimpleExpressionDriverFailedToAllocateScannerException : public std::exception {
+        public:
+
+            SimpleExpressionDriverFailedToAllocateScannerException() = default;
+
+            std::string what() {
+                return "Failed to allocate scanner.";
+            }
+
+        };
+
+        class SimpleExpressionDriverFailedToAllocateParserException : public std::exception {
+        public:
+
+            SimpleExpressionDriverFailedToAllocateParserException() = default;
+
+            std::string what() {
+                return "Failed to allocate parser.";
+            }
+
+        };
+
+        class SimpleExpressionDriverParseFailedException : public std::exception {
+        public:
+
+            SimpleExpressionDriverParseFailedException() = default;
+
+            std::string what() {
+                return "Failed to allocate parser.";
+            }
+
+        };
+
         SimpleExpressionDriver() = default;
 
         virtual ~SimpleExpressionDriver();
@@ -91,52 +173,54 @@ namespace mimg {
          * Parse from a file.
          * @param file_name the full path to a file.
          */
-        void parse(const char *const file_name);
+        SimpleCalculator parse(const char *const file_name);
 
         /**
          * Parse from a C++ input stream.
          * @param iss the input stream.
          */
-        void parse(std::istream &iss);
+        SimpleCalculator parse(std::istream &iss);
 
-        void add_upper();
+        void push_oparen();
 
-        void add_lower();
+        void push_cparen();
 
-        void add_word(const std::string &word);
+        void push_xvar();
 
-        void add_newline();
+        void push_yvar();
 
-        void add_char();
+        void push_zvar();
 
-        size_t get_chars() const { return chars; }
-        size_t get_words() const { return words; }
-        size_t get_lines() const { return lines; }
-        size_t get_upper_case() const { return upper_case; }
-        size_t get_lower_case() const { return lower_case; }
-        std::string get_red() const { return red; }
-        std::string get_blue() const { return blue; }
-        std::string get_norm() const { return  norm; }
+        void push_plus();
+
+        void push_minus();
+
+        void push_multiply();
+
+        void push_divide();
+
+        void push_float(double value);
+
+        void push_sin();
+
+        void push_cos();
+
+        void push_tan();
+
+        void push_expression();
 
     private:
 
         void parse_helper(std::istream &stream);
 
-        std::size_t chars = 0;
-        std::size_t words = 0;
-        std::size_t lines = 0;
-        std::size_t upper_case = 0;
-        std::size_t lower_case = 0;
-
         SimpleExpressionParser *parser = nullptr;
+
         SimpleExpressionScanner *scanner = nullptr;
 
-        const std::string red = "\033[1;31m";
-        const std::string blue = "\033[1;36m";
-        const std::string norm = "\033[0m";
+        SimpleCalculator calculator;
+
+        std::vector<Token> stack;
 
     };
-
-    std::ostream &operator << (std::ostream &out, const SimpleExpressionDriver &driver);
 
 } // namespace mimg
