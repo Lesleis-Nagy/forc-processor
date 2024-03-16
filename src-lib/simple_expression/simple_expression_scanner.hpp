@@ -5,7 +5,7 @@
 #pragma once
 
 #if ! defined(yyFlexLexerOnce)
-#include <FlexLexer.h>
+#include "FlexLexer.h"
 #endif
 
 #include "simple_expression.tab.hh"
